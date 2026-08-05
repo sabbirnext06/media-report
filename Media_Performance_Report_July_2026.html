@@ -399,13 +399,17 @@ body {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 24px;
+  overflow: hidden;
 }
 .chart-card h4 {
   font-size: 14px; font-weight: 600; margin-bottom: 16px;
   color: var(--text-secondary);
 }
+.chart-card .chart-wrap {
+  position: relative; height: 260px; width: 100%;
+}
 .chart-card canvas {
-  max-height: 260px;
+  display: block; width: 100% !important; height: 100% !important;
 }
 
 /* ═══ CAMPAIGN CARDS ═══ */
@@ -787,6 +791,7 @@ body {
 
   .chart-card { padding: 16px; }
   .chart-card h4 { font-size: 13px; margin-bottom: 12px; }
+  .chart-card .chart-wrap { height: 220px; }
 
   /* Twitter metric grid */
   .tw-card { padding: 20px; }
@@ -1074,8 +1079,8 @@ document.getElementById('gateInput').focus();
       </table>
     </div>
     <div class="chart-grid">
-      <div class="chart-card"><h4>Purchase Volume by Platform</h4><canvas id="chartPurchases"></canvas></div>
-      <div class="chart-card"><h4>Revenue by Platform</h4><canvas id="chartRevenue"></canvas></div>
+      <div class="chart-card"><h4>Purchase Volume by Platform</h4><div class="chart-wrap"><canvas id="chartPurchases"></canvas></div></div>
+      <div class="chart-card"><h4>Revenue by Platform</h4><div class="chart-wrap"><canvas id="chartRevenue"></canvas></div></div>
     </div>
   </div>
 
