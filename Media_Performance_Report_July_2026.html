@@ -147,7 +147,7 @@ body {
   display: none; flex-direction: column;
   background: var(--bg-secondary);
   border-top: 1px solid var(--border);
-  padding: 8px 16px 16px;
+  padding: 0 16px;
   gap: 2px;
   max-height: 0; overflow: hidden;
   transition: max-height 0.35s ease, padding 0.35s ease;
@@ -166,9 +166,10 @@ body {
   color: var(--text-primary); background: var(--bg-card);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1100px) {
   .mobile-menu-btn { display: flex; }
   .mobile-menu { display: flex; }
+  .nav-links { display: none; }
   .nav-date { display: none; }
 }
 
@@ -201,8 +202,8 @@ body {
   -webkit-background-clip: text; -webkit-text-fill-color: transparent;
 }
 .hero p {
-  font-size: 17px; color: var(--text-secondary);
-  font-weight: 400; max-width: 500px;
+  font-size: 15px; color: var(--text-secondary);
+  font-weight: 400; white-space: nowrap;
 }
 .hero-badge {
   display: inline-flex; align-items: center; gap: 6px;
@@ -746,14 +747,12 @@ body {
 @media (max-width: 768px) {
   .main { padding: 76px 16px 32px; }
   .nav-inner { padding: 0 16px; height: 56px; }
-  .nav-links { display: none; }
   .nav-brand { font-size: 13px; }
-  .nav-date { font-size: 11px; }
 
   .hero { padding: 32px 0 24px; }
   .hero-label { font-size: 10px; letter-spacing: 2px; margin-bottom: 14px; }
   .hero h1 { font-size: 32px; letter-spacing: -1px; }
-  .hero p { font-size: 14px; }
+  .hero p { font-size: 13px; white-space: normal; }
   .hero-badge { font-size: 10px; margin-top: 14px; }
 
   .kpi-strip { grid-template-columns: repeat(2, 1fr) !important; gap: 10px; margin-bottom: 32px; }
