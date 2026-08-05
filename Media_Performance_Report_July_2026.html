@@ -885,6 +885,86 @@ body {
 </head>
 <body>
 
+<!-- PASSWORD GATE -->
+<div id="gate" style="
+  position:fixed;inset:0;z-index:9999;
+  background:#0a0e17;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Inter',-apple-system,sans-serif;
+">
+  <div style="
+    background:#1a1f2e;border:1px solid rgba(255,255,255,0.08);
+    border-radius:20px;padding:48px 40px;width:100%;max-width:400px;
+    box-shadow:0 24px 80px rgba(0,0,0,0.6);text-align:center;
+    margin:16px;
+  ">
+    <div style="width:48px;height:48px;background:rgba(59,130,246,0.12);border:1px solid rgba(59,130,246,0.25);border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-size:22px;">&#128274;</div>
+    <div style="font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#3b82f6;margin-bottom:10px;">FundedNext Media</div>
+    <h2 style="color:#f1f5f9;font-size:22px;font-weight:700;letter-spacing:-0.5px;margin-bottom:6px;">Protected Report</h2>
+    <p style="color:#64748b;font-size:13px;margin-bottom:32px;">Enter the password to access this report</p>
+
+    <div style="position:relative;margin-bottom:12px;">
+      <input id="gateInput" type="password" placeholder="Enter password"
+        style="
+          width:100%;box-sizing:border-box;
+          background:#111827;border:1px solid rgba(255,255,255,0.08);
+          border-radius:10px;padding:14px 48px 14px 16px;
+          font-size:15px;color:#f1f5f9;outline:none;
+          transition:border-color 0.2s;
+          -webkit-text-fill-color:#f1f5f9;
+        "
+        onkeydown="if(event.key==='Enter')unlock()"
+        onfocus="this.style.borderColor='rgba(59,130,246,0.5)'"
+        onblur="this.style.borderColor='rgba(255,255,255,0.08)'"
+      />
+      <button onclick="togglePw()" tabindex="-1" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#64748b;font-size:16px;padding:0;line-height:1;" id="eyeBtn">&#128065;</button>
+    </div>
+
+    <div id="gateError" style="color:#ef4444;font-size:12px;margin-bottom:12px;min-height:16px;"></div>
+
+    <button onclick="unlock()" style="
+      width:100%;padding:14px;
+      background:linear-gradient(135deg,#3b82f6,#2563eb);
+      border:none;border-radius:10px;
+      color:#fff;font-size:15px;font-weight:600;
+      cursor:pointer;letter-spacing:-0.2px;
+      transition:opacity 0.2s;
+    " onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">
+      Unlock Report
+    </button>
+  </div>
+</div>
+
+<script>
+function unlock() {
+  var val = document.getElementById('gateInput').value;
+  if (val === '2023') {
+    var gate = document.getElementById('gate');
+    gate.style.transition = 'opacity 0.4s ease';
+    gate.style.opacity = '0';
+    setTimeout(function(){ gate.style.display = 'none'; }, 400);
+  } else {
+    var err = document.getElementById('gateError');
+    var inp = document.getElementById('gateInput');
+    err.textContent = 'Incorrect password. Please try again.';
+    inp.style.borderColor = 'rgba(239,68,68,0.5)';
+    inp.value = '';
+    inp.focus();
+    setTimeout(function(){
+      err.textContent = '';
+      inp.style.borderColor = 'rgba(255,255,255,0.08)';
+    }, 3000);
+  }
+}
+function togglePw() {
+  var inp = document.getElementById('gateInput');
+  var btn = document.getElementById('eyeBtn');
+  if (inp.type === 'password') { inp.type = 'text'; btn.innerHTML = '&#128064;'; }
+  else { inp.type = 'password'; btn.innerHTML = '&#128065;'; }
+}
+document.getElementById('gateInput').focus();
+</script>
+
 <div class="ambient-bg">
   <div class="orb"></div><div class="orb"></div><div class="orb"></div>
 </div>
