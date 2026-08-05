@@ -1,0 +1,5 @@
+{
+  "rewrites": [
+    { "source": "/", "destination": "/Media_Performance_Report_July_2026.html" }
+  ]
+}
