@@ -752,10 +752,10 @@ body {
   .hero p { font-size: 14px; }
   .hero-badge { font-size: 10px; margin-top: 14px; }
 
-  .kpi-strip { grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 32px; }
-  .kpi-card { padding: 16px; }
+  .kpi-strip { grid-template-columns: repeat(2, 1fr) !important; gap: 10px; margin-bottom: 32px; }
+  .kpi-card { padding: 14px 12px; }
   .kpi-label { font-size: 9px; letter-spacing: 1px; margin-bottom: 6px; }
-  .kpi-value { font-size: 18px; }
+  .kpi-value { font-size: 15px; }
 
   .section { margin-bottom: 32px; }
   .section-header { flex-wrap: wrap; gap: 8px; margin-bottom: 16px; padding-bottom: 12px; }
@@ -860,7 +860,7 @@ body {
   .hero h1 { font-size: 26px; }
   .hero p { font-size: 13px; }
 
-  .kpi-strip { grid-template-columns: 1fr; gap: 8px; }
+  .kpi-strip { grid-template-columns: 1fr !important; gap: 8px; }
   .kpi-card { padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; }
   .kpi-card::before { height: 100%; width: 3px; top: 0; left: 0; right: auto; border-radius: var(--radius) 0 0 var(--radius); }
   .kpi-label { margin-bottom: 0; font-size: 10px; }
@@ -1218,15 +1218,15 @@ document.getElementById('gateInput').focus();
     <span class="section-sub">Full-funnel paid media across Google, Meta, Bing & TikTok</span>
   </div>
 
-  <div class="stat-row cols-4">
+  <div class="stat-row cols-3">
     <div class="stat-card"><div class="label">Sessions</div><div class="value" style="color:var(--accent)">916,011</div></div>
     <div class="stat-card"><div class="label">Signups</div><div class="value" style="color:var(--purple)">3,009</div></div>
     <div class="stat-card"><div class="label">Begin Checkout</div><div class="value" style="color:var(--orange)">22,319</div></div>
-    <div class="stat-card"><div class="label">Total Purchases</div><div class="value" style="color:var(--green)">12,914</div></div>
   </div>
-  <div class="stat-row cols-3" style="margin-top:16px">
-    <div class="stat-card"><div class="label">First-Time Purchases</div><div class="value" style="color:var(--orange)">1,666</div></div>
+  <div class="stat-row cols-4" style="margin-top:16px">
+    <div class="stat-card"><div class="label">Total Purchases</div><div class="value" style="color:var(--green)">12,914</div></div>
     <div class="stat-card"><div class="label">Est. Total Revenue</div><div class="value" style="color:var(--accent)">$1,146,763</div></div>
+    <div class="stat-card"><div class="label">First-Time Purchases</div><div class="value" style="color:var(--orange)">1,666</div></div>
     <div class="stat-card"><div class="label">New Customer Revenue</div><div class="value" style="color:var(--orange)">$147,940</div></div>
   </div>
 
