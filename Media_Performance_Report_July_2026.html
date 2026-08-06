@@ -1534,6 +1534,47 @@ Chart.defaults.color = '#94a3b8';
 Chart.defaults.font.family = "'Inter', sans-serif";
 Chart.defaults.font.size = 12;
 
+// Plugin: draw value labels above each bar
+const barLabelPlugin = {
+  id: 'barLabels',
+  afterDatasetsDraw(chart) {
+    const ctx = chart.ctx;
+    chart.data.datasets.forEach((dataset, i) => {
+      const meta = chart.getDatasetMeta(i);
+      const isRevenue = chart.canvas.id === 'chartRevenue';
+      meta.data.forEach((bar, index) => {
+        const raw = dataset.data[index];
+        let label;
+        if (isRevenue) {
+          if (raw >= 1000000) label = '$' + (raw / 1000000).toFixed(1) + 'M';
+          else if (raw >= 1000) label = '$' + (raw / 1000).toFixed(0) + 'K';
+          else label = '$' + raw;
+        } else {
+          if (raw >= 1000) label = (raw / 1000).toFixed(1) + 'K';
+          else label = raw.toString();
+        }
+        const barHeight = bar.base - bar.y;
+        const minBarForInside = 40;
+        ctx.save();
+        ctx.font = 'bold 11px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        if (barHeight >= minBarForInside) {
+          // label inside near top of bar
+          ctx.fillStyle = 'rgba(255,255,255,0.9)';
+          ctx.fillText(label, bar.x, bar.y + 14);
+        } else {
+          // label above bar
+          ctx.fillStyle = 'rgba(241,245,249,0.75)';
+          ctx.fillText(label, bar.x, bar.y - 10);
+        }
+        ctx.restore();
+      });
+    });
+  }
+};
+Chart.register(barLabelPlugin);
+
 // Purchase Volume Chart
 new Chart(document.getElementById('chartPurchases'), {
   type: 'bar',
@@ -1549,9 +1590,8 @@ new Chart(document.getElementById('chartPurchases'), {
   },
   options: {
     responsive: true, maintainAspectRatio: false,
-    plugins: { legend: { display: false },
-      tooltip: { backgroundColor: '#1a1f2e', titleColor: '#f1f5f9', bodyColor: '#94a3b8', borderColor: 'rgba(255,255,255,0.1)', borderWidth: 1, cornerRadius: 8, padding: 12 }
-    },
+    layout: { padding: { top: 24 } },
+    plugins: { legend: { display: false }, tooltip: { enabled: false } },
     scales: {
       x: { grid: { display: false }, border: { display: false } },
       y: { display: false, grid: { display: false } }
@@ -1567,19 +1607,15 @@ new Chart(document.getElementById('chartRevenue'), {
     datasets: [{
       label: 'Revenue',
       data: [12131465, 1770972, 670599, 153789, 97272, 90510],
-      backgroundColor: ['#22c55e','#22c55e','#22c55e','#22c55e','#22c55e'],
+      backgroundColor: ['#22c55e','#22c55e','#22c55e','#22c55e','#22c55e','#22c55e'],
       borderRadius: 6,
       borderSkipped: false,
     }]
   },
   options: {
     responsive: true, maintainAspectRatio: false,
-    plugins: { legend: { display: false },
-      tooltip: {
-        backgroundColor: '#1a1f2e', titleColor: '#f1f5f9', bodyColor: '#94a3b8', borderColor: 'rgba(255,255,255,0.1)', borderWidth: 1, cornerRadius: 8, padding: 12,
-        callbacks: { label: (ctx) => '$' + ctx.raw.toLocaleString() }
-      }
-    },
+    layout: { padding: { top: 24 } },
+    plugins: { legend: { display: false }, tooltip: { enabled: false } },
     scales: {
       x: { grid: { display: false }, border: { display: false } },
       y: { display: false, grid: { display: false } }
