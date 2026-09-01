@@ -1868,8 +1868,10 @@ document.querySelectorAll('.month-btn').forEach(btn => {
     btn.classList.add('active');
     document.querySelectorAll('.month-report').forEach(r => r.classList.remove('active'));
     document.getElementById(month + '-content').classList.add('active');
+    const navDate = document.querySelector('.nav-date');
     if (month === 'august') {
       setNavLinks(augustNavLinks);
+      if (navDate) navDate.textContent = 'AUG 2026';
       // Trigger reveal for august sections
       document.querySelectorAll('#august-content .reveal').forEach(el => {
         if (!el.classList.contains('visible')) observer.observe(el);
@@ -1882,6 +1884,7 @@ document.querySelectorAll('.month-btn').forEach(btn => {
       });
     } else {
       setNavLinks(julyNavLinks);
+      if (navDate) navDate.textContent = 'JUL 2026';
     }
     window.scrollTo({top: 0, behavior: 'smooth'});
   });
