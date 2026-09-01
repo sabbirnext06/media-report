@@ -724,6 +724,25 @@ body {
   animation: fadeUp 0.4s ease-out;
 }
 
+/* ═══ MONTH SWITCHER ═══ */
+.month-switcher {
+  display: flex; gap: 4px;
+  background: var(--bg-secondary); padding: 5px;
+  border-radius: 14px; width: fit-content;
+  margin: 28px auto 0;
+  border: 1px solid var(--border);
+}
+.month-btn {
+  padding: 10px 28px; border-radius: 10px;
+  font-size: 14px; font-weight: 600; letter-spacing: -0.2px;
+  color: var(--text-muted); cursor: pointer;
+  transition: var(--transition); border: none; background: none;
+}
+.month-btn:hover { color: var(--text-secondary); }
+.month-btn.active { background: var(--accent); color: #fff; }
+.month-report { display: none; }
+.month-report.active { display: block; }
+
 /* ═══ SCROLL REVEAL ═══ */
 .reveal {
   opacity: 0; transform: translateY(24px);
@@ -1015,6 +1034,15 @@ document.getElementById('gateInput').focus();
 </nav>
 
 <div class="main">
+
+<!-- MONTH SWITCHER -->
+<div class="month-switcher">
+  <button class="month-btn active" data-month="july">July 2026</button>
+  <button class="month-btn" data-month="august">August 2026</button>
+</div>
+
+<!-- JULY REPORT -->
+<div class="month-report active" id="july-content">
 
 <!-- HERO -->
 <div class="hero" id="overview">
@@ -1453,9 +1481,415 @@ document.getElementById('gateInput').focus();
   <p>Media Performance Report — July 2026 &nbsp;|&nbsp; FundedNext &nbsp;|&nbsp; Confidential</p>
 </div>
 
+</div><!-- end july-content -->
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- AUGUST REPORT -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="month-report" id="august-content">
+
+<!-- AUGUST HERO -->
+<div class="hero" id="aug-overview">
+  <div class="hero-label">Media Performance Report</div>
+  <h1>August 2026</h1>
+  <p>Platform & Performance Overview — Reporting Period: 1 Aug – 31 Aug 2026</p>
+  <div class="hero-badge">CONFIDENTIAL</div>
+</div>
+
+<!-- AUGUST KPI STRIP -->
+<div class="kpi-strip reveal" style="grid-template-columns: repeat(2, 1fr); max-width: 640px;">
+  <div class="kpi-card">
+    <div class="kpi-label">Ads Launched</div>
+    <div class="kpi-value" data-count="11712">0</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">Total Revenue</div>
+    <div class="kpi-value">$16,195,122</div>
+  </div>
+</div>
+
+<!-- AUGUST PLATFORM PERFORMANCE -->
+<div class="section reveal" id="aug-platforms">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Platform Performance</h2>
+    <span class="section-sub">All Platforms — August 2026</span>
+  </div>
+  <div class="tabs">
+    <button class="tab active" data-tab="aug-overall">Overall</button>
+    <button class="tab" data-tab="aug-fnc">FNC — CFDs</button>
+    <button class="tab" data-tab="aug-fnf">FNF — Futures</button>
+  </div>
+  <!-- Overall Tab -->
+  <div class="tab-content active" id="tab-aug-overall">
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Platform</th><th>Ads</th><th>Aug Purchases</th><th>Jul Purchases</th><th>Purchase Growth</th><th>Aug Spend</th><th>Aug Revenue</th><th>Jul Revenue</th><th>Revenue Growth</th></tr></thead>
+        <tbody>
+          <tr><td><div class="platform-name"><span class="platform-dot" style="background:#4285f4"></span>Google</div></td><td>5,664</td><td style="font-weight:700;color:#fff">87,670</td><td>93,692</td><td><span class="growth-badge flat">&#9660; -6.43%</span></td><td>$700,111</td><td class="revenue-val">$12,707,400</td><td>$12,131,465</td><td><span class="growth-badge up">&#9650; 4.75%</span></td></tr>
+          <tr><td><div class="platform-name"><span class="platform-dot" style="background:#00a4ef"></span>Bing</div></td><td>553</td><td style="font-weight:700;color:#fff">12,724</td><td>13,518</td><td><span class="growth-badge flat">&#9660; -5.87%</span></td><td>$86,553</td><td class="revenue-val">$1,887,993</td><td>$1,770,972</td><td><span class="growth-badge up">&#9650; 6.61%</span></td></tr>
+          <tr><td><div class="platform-name"><span class="platform-dot" style="background:#1877f2"></span>Meta</div></td><td>4,928</td><td style="font-weight:700;color:#fff">7,702</td><td>5,070</td><td><span class="growth-badge up">&#9650; 51.91%</span></td><td>$230,078</td><td class="revenue-val">$1,101,817</td><td>$670,599</td><td><span class="growth-badge up">&#9650; 64.30%</span></td></tr>
+          <tr><td><div class="platform-name"><span class="platform-dot" style="background:#1da1f2"></span>Twitter</div></td><td>185</td><td style="font-weight:700;color:#fff">1,828</td><td>1,338</td><td><span class="growth-badge up">&#9650; 36.62%</span></td><td>$79,652</td><td class="revenue-val">$289,015</td><td>$153,789</td><td><span class="growth-badge up">&#9650; 87.93%</span></td></tr>
+          <tr><td><div class="platform-name"><span class="platform-dot" style="background:#669df6"></span>DV360</div></td><td>87</td><td style="font-weight:700;color:#fff">874</td><td>894</td><td><span class="growth-badge flat">&#9660; -2.24%</span></td><td>$14,556</td><td class="revenue-val">$108,958</td><td>$97,272</td><td><span class="growth-badge up">&#9650; 12.01%</span></td></tr>
+          <tr><td><div class="platform-name"><span class="platform-dot" style="background:#ff0050"></span>TikTok</div></td><td>295</td><td style="font-weight:700;color:#fff">699</td><td>673</td><td><span class="growth-badge up">&#9650; 3.86%</span></td><td>$63,032</td><td class="revenue-val">$99,938</td><td>$90,510</td><td><span class="growth-badge up">&#9650; 10.42%</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="chart-grid">
+      <div class="chart-card"><h4>Purchase Volume by Platform</h4><div class="chart-wrap"><canvas id="chartAugPurchases"></canvas></div></div>
+      <div class="chart-card"><h4>Revenue by Platform</h4><div class="chart-wrap"><canvas id="chartAugRevenue"></canvas></div></div>
+    </div>
+  </div>
+  <!-- FNC Tab -->
+  <div class="tab-content" id="tab-aug-fnc">
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Platform</th><th>Ads</th><th>Aug Purchases</th><th>Jul Purchases</th><th>Purchase Growth</th><th>Aug Spend</th><th>Aug Revenue</th><th>Jul Revenue</th><th>Revenue Growth</th></tr></thead>
+        <tbody>
+          <tr><td><div class="platform-name"><span class="platform-dot" style="background:#4285f4"></span>Google</div></td><td>2,824</td><td style="font-weight:700;color:#fff">34,014</td><td>36,118</td><td><span class="growth-badge flat">&#9660; -5.83%</span></td><td>$338,421</td><td class="revenue-val">$5,387,929</td><td>$5,926,453</td><td><span class="growth-badge flat">&#9660; -9.09%</span></td></tr>
+          <tr><td><div class="platform-name"><span class="platform-dot" style="background:#00a4ef"></span>Bing</div></td><td>278</td><td style="font-weight:700;color:#fff">2,856</td><td>3,135</td><td><span class="growth-badge flat">&#9660; -8.90%</span></td><td>$43,976</td><td class="revenue-val">$560,609</td><td>$631,135</td><td><span class="growth-badge flat">&#9660; -11.17%</span></td></tr>
+          <tr><td><div class="platform-name"><span class="platform-dot" style="background:#1877f2"></span>Meta</div></td><td>4,039</td><td style="font-weight:700;color:#fff">3,973</td><td>2,861</td><td><span class="growth-badge up">&#9650; 38.87%</span></td><td>$149,810</td><td class="revenue-val">$661,075</td><td>$458,728</td><td><span class="growth-badge up">&#9650; 44.11%</span></td></tr>
+          <tr><td><div class="platform-name"><span class="platform-dot" style="background:#ff0050"></span>TikTok</div></td><td>209</td><td style="font-weight:700;color:#fff">302</td><td>354</td><td><span class="growth-badge flat">&#9660; -14.69%</span></td><td>$35,151</td><td class="revenue-val">$41,464</td><td>$55,449</td><td><span class="growth-badge flat">&#9660; -25.22%</span></td></tr>
+          <tr><td><div class="platform-name"><span class="platform-dot" style="background:#1da1f2"></span>Twitter</div></td><td>99</td><td style="font-weight:700;color:#fff">220</td><td>103</td><td><span class="growth-badge up">&#9650; 113.59%</span></td><td>$30,559</td><td class="revenue-val">$46,553</td><td>$23,846</td><td><span class="growth-badge up">&#9650; 95.22%</span></td></tr>
+          <tr><td><div class="platform-name"><span class="platform-dot" style="background:#669df6"></span>DV360</div></td><td>54</td><td style="font-weight:700;color:#fff">490</td><td>454</td><td><span class="growth-badge up">&#9650; 7.93%</span></td><td>$9,760</td><td class="revenue-val">$63,189</td><td>$57,462</td><td><span class="growth-badge up">&#9650; 9.97%</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <!-- FNF Tab -->
+  <div class="tab-content" id="tab-aug-fnf">
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Platform</th><th>Ads</th><th>Aug Purchases</th><th>Jul Purchases</th><th>Purchase Growth</th><th>Aug Spend</th><th>Aug Revenue</th><th>Jul Revenue</th><th>Revenue Growth</th></tr></thead>
+        <tbody>
+          <tr><td><div class="platform-name"><span class="platform-dot" style="background:#4285f4"></span>Google</div></td><td>2,840</td><td style="font-weight:700;color:#fff">53,656</td><td>57,574</td><td><span class="growth-badge flat">&#9660; -6.81%</span></td><td>$361,690</td><td class="revenue-val">$7,319,471</td><td>$6,205,012</td><td><span class="growth-badge up">&#9650; 17.96%</span></td></tr>
+          <tr><td><div class="platform-name"><span class="platform-dot" style="background:#00a4ef"></span>Bing</div></td><td>275</td><td style="font-weight:700;color:#fff">9,868</td><td>10,383</td><td><span class="growth-badge flat">&#9660; -4.96%</span></td><td>$42,577</td><td class="revenue-val">$1,327,384</td><td>$1,139,838</td><td><span class="growth-badge up">&#9650; 16.45%</span></td></tr>
+          <tr><td><div class="platform-name"><span class="platform-dot" style="background:#1877f2"></span>Meta</div></td><td>889</td><td style="font-weight:700;color:#fff">3,729</td><td>2,209</td><td><span class="growth-badge up">&#9650; 68.81%</span></td><td>$80,267</td><td class="revenue-val">$440,743</td><td>$211,871</td><td><span class="growth-badge up">&#9650; 108.02%</span></td></tr>
+          <tr><td><div class="platform-name"><span class="platform-dot" style="background:#1da1f2"></span>Twitter</div></td><td>86</td><td style="font-weight:700;color:#fff">1,608</td><td>1,235</td><td><span class="growth-badge up">&#9650; 30.20%</span></td><td>$49,093</td><td class="revenue-val">$242,462</td><td>$129,943</td><td><span class="growth-badge up">&#9650; 86.59%</span></td></tr>
+          <tr><td><div class="platform-name"><span class="platform-dot" style="background:#ff0050"></span>TikTok</div></td><td>86</td><td style="font-weight:700;color:#fff">397</td><td>319</td><td><span class="growth-badge up">&#9650; 24.45%</span></td><td>$27,881</td><td class="revenue-val">$58,474</td><td>$35,060</td><td><span class="growth-badge up">&#9650; 66.78%</span></td></tr>
+          <tr><td><div class="platform-name"><span class="platform-dot" style="background:#669df6"></span>DV360</div></td><td>33</td><td style="font-weight:700;color:#fff">384</td><td>440</td><td><span class="growth-badge flat">&#9660; -12.73%</span></td><td>$4,796</td><td class="revenue-val">$45,769</td><td>$39,811</td><td><span class="growth-badge up">&#9650; 14.97%</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- AUGUST TWITTER -->
+<div class="section reveal" id="aug-twitter">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Twitter (X) — August Performance</h2>
+    <span class="section-sub">MoM growth across both products</span>
+  </div>
+  <div class="twitter-split">
+    <div class="tw-card" style="border-top:3px solid var(--green)">
+      <h3 style="color:var(--green)">Futures</h3>
+      <div class="tw-metric-grid">
+        <div class="tw-metric"><div class="val" style="color:var(--green)">$49,093</div><div class="lbl">Spend</div></div>
+        <div class="tw-metric"><div class="val" style="color:var(--green)">1,608</div><div class="lbl">Purchases</div></div>
+        <div class="tw-metric"><div class="val" style="color:var(--green)">$242,462</div><div class="lbl">Revenue</div></div>
+        <div class="tw-metric"><div class="val" style="color:var(--green)">4.94</div><div class="lbl">ROAS</div></div>
+        <div class="tw-metric"><div class="val" style="color:var(--green)">18.93M</div><div class="lbl">Impressions</div></div>
+        <div class="tw-metric"><div class="val" style="color:var(--green)">37,711</div><div class="lbl">Link Clicks</div></div>
+      </div>
+    </div>
+    <div class="tw-card" style="border-top:3px solid var(--orange)">
+      <h3 style="color:var(--orange)">CFDs</h3>
+      <div class="tw-metric-grid">
+        <div class="tw-metric"><div class="val" style="color:var(--orange)">$30,559</div><div class="lbl">Spend</div></div>
+        <div class="tw-metric"><div class="val" style="color:var(--orange)">220</div><div class="lbl">Purchases</div></div>
+        <div class="tw-metric"><div class="val" style="color:var(--orange)">$46,553</div><div class="lbl">Revenue</div></div>
+        <div class="tw-metric"><div class="val" style="color:var(--orange)">1.52</div><div class="lbl">ROAS</div></div>
+        <div class="tw-metric"><div class="val" style="color:var(--orange)">27.48M</div><div class="lbl">Impressions</div></div>
+        <div class="tw-metric"><div class="val" style="color:var(--orange)">47,084</div><div class="lbl">Link Clicks</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="combined-bar">
+    <strong>Combined:</strong> <span>1,828 purchases &nbsp;|&nbsp; $289,015 revenue &nbsp;|&nbsp; $79,652 total spend &nbsp;|&nbsp; &#9650; 36.62% purchase growth MoM</span>
+  </div>
+</div>
+
+<!-- AUGUST FLEX -->
+<div class="section reveal" id="aug-flex">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Flex — Performance Deep Dive</h2>
+    <span class="section-sub">Full-funnel paid media across Google, Meta, Bing & TikTok</span>
+  </div>
+  <div class="stat-row cols-3">
+    <div class="stat-card"><div class="label">Sessions</div><div class="value" style="color:var(--accent)">1,227,469</div></div>
+    <div class="stat-card"><div class="label">Signups</div><div class="value" style="color:var(--purple)">3,165</div></div>
+    <div class="stat-card"><div class="label">Begin Checkout</div><div class="value" style="color:var(--orange)">9,470</div></div>
+  </div>
+  <div class="stat-row cols-4" style="margin-top:16px">
+    <div class="stat-card"><div class="label">Total Purchases</div><div class="value" style="color:var(--green)">10,654</div></div>
+    <div class="stat-card"><div class="label">Est. Total Revenue</div><div class="value" style="color:var(--accent)">$908,893</div></div>
+    <div class="stat-card"><div class="label">New Customer Purchase</div><div class="value" style="color:var(--orange)">1,617</div></div>
+    <div class="stat-card"><div class="label">New Customer Revenue</div><div class="value" style="color:var(--orange)">$137,946</div></div>
+  </div>
+  <div class="info-card" style="margin-top:16px;border-left:3px solid var(--accent)">
+    <h3 style="color:var(--accent)">What drove growth</h3>
+    <ul>
+      <li>Sessions grew +34% to 1.23M — acquisition campaigns scaled effectively with competitor-audience targeting on Google and lookalike campaigns on Meta</li>
+      <li>Remarketing ran simultaneously across all platforms targeting 180D and 30D visitors, past purchasers and relevant event audiences</li>
+      <li>Focus for September: convert increased traffic more efficiently into purchases</li>
+    </ul>
+  </div>
+</div>
+
+<!-- AUGUST RAPID PRO & DAILY -->
+<div class="section reveal" id="aug-rapid">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Rapid Pro & Daily</h2>
+    <span class="section-sub">Successor to discontinued Rapid package — August performance</span>
+  </div>
+  <div class="stat-row cols-4">
+    <div class="stat-card"><div class="label">Sessions</div><div class="value" style="color:var(--accent)">1,677,106</div></div>
+    <div class="stat-card"><div class="label">Signups</div><div class="value" style="color:var(--purple)">2,749</div></div>
+    <div class="stat-card"><div class="label">Begin Checkout</div><div class="value" style="color:var(--orange)">8,243</div></div>
+    <div class="stat-card"><div class="label">Total Purchases</div><div class="value" style="color:var(--green)">8,827</div></div>
+  </div>
+  <div class="stat-row cols-3" style="margin-top:16px">
+    <div class="stat-card"><div class="label">New Customer Purchase</div><div class="value" style="color:var(--orange)">1,231</div></div>
+    <div class="stat-card"><div class="label">Est. Total Revenue</div><div class="value" style="color:var(--accent)">$1,053,767</div></div>
+    <div class="stat-card"><div class="label">New Customer Revenue</div><div class="value" style="color:var(--orange)">$146,957</div></div>
+  </div>
+  <div class="table-wrap" style="margin-top:20px">
+    <table>
+      <thead><tr><th>Metric</th><th>July 2026</th><th>August 2026</th><th>Growth</th></tr></thead>
+      <tbody>
+        <tr><td>Sessions</td><td>928,148</td><td style="font-weight:700;color:#fff">1,677,106</td><td><span class="growth-badge up">&#9650; 80.7%</span></td></tr>
+        <tr><td>Signups</td><td>859</td><td style="font-weight:700;color:#fff">2,749</td><td><span class="growth-badge up">&#9650; 220%</span></td></tr>
+        <tr><td>Begin Checkout</td><td>6,215</td><td style="font-weight:700;color:#fff">8,243</td><td><span class="growth-badge up">&#9650; 32.6%</span></td></tr>
+        <tr><td>Total Purchases</td><td>3,320</td><td style="font-weight:700;color:#fff">8,827</td><td><span class="growth-badge up">&#9650; 165.9%</span></td></tr>
+        <tr><td>New Customer Purchases</td><td>376</td><td style="font-weight:700;color:#fff">1,231</td><td><span class="growth-badge up">&#9650; 227.4%</span></td></tr>
+        <tr><td>Est. Total Revenue</td><td>$374,662</td><td style="font-weight:700;color:#fff">$1,053,767</td><td><span class="growth-badge up">&#9650; 181.3%</span></td></tr>
+        <tr><td>New Customer Revenue</td><td>$42,431</td><td style="font-weight:700;color:#fff">$146,957</td><td><span class="growth-badge up">&#9650; 246.4%</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="direction-banner" style="margin-top:16px">
+    <h4>What drove the growth</h4>
+    <p>Discount code offer for both new and existing users turned interest into action. Paid media amplified organic momentum — sessions nearly doubled, purchases more than doubled, and revenue grew 181% MoM.</p>
+  </div>
+</div>
+
+<!-- AUGUST RTM -->
+<div class="section reveal" id="aug-rtm">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <h2 class="section-title">Real-Time Marketing (RTM)</h2>
+    <span class="section-sub">1 campaign — competitor controversy capitalisation</span>
+  </div>
+  <div class="campaign-grid" style="grid-template-columns:1fr">
+    <div class="campaign-card" style="border-top:3px solid var(--accent)">
+      <h3 style="color:var(--accent)">Funding Pips</h3>
+      <div class="desc">Funding Pips blocked a trader — promoted FundedNext's transparency-focused features across Twitter & Google</div>
+      <div class="campaign-metric"><span class="m-label">Total Spend</span><span class="m-value" style="color:var(--text-primary)">$1,708</span></div>
+      <div class="campaign-metric"><span class="m-label">Sessions</span><span class="m-value" style="color:var(--text-primary)">7,456</span></div>
+      <div class="campaign-metric"><span class="m-label">Purchases</span><span class="m-value" style="color:var(--green)">302</span></div>
+      <div class="campaign-metric"><span class="m-label">Revenue</span><span class="m-value" style="color:var(--green)">$43,271</span></div>
+      <div class="campaign-metric"><span class="m-label">ROAS</span><span class="m-value" style="color:var(--green)">25.33</span></div>
+      <div class="campaign-channels"><strong>Channels:</strong> Google PMax (high-intent traders seeking transparency) + Twitter (CFDs competitor channels, KOLs & competitor keywords — India)</div>
+    </div>
+  </div>
+</div>
+
+<!-- AUGUST REDDIT -->
+<div class="section reveal" id="aug-reddit">
+  <div class="section-header">
+    <span class="section-num">06</span>
+    <h2 class="section-title">Reddit Ads — Launch</h2>
+    <span class="section-sub">FundedNext's first ever Reddit campaigns — Aug 27–31</span>
+  </div>
+  <div class="direction-banner" style="margin-bottom:20px;background:linear-gradient(135deg,rgba(59,130,246,0.06),rgba(167,139,250,0.06));border-color:rgba(59,130,246,0.2)">
+    <h4 style="color:var(--accent)">Milestone</h4>
+    <p>Compliance restrictions previously blocked Reddit ads. Re-engaged partner Aleph, navigated requirements, and launched reach, signup and Futures-specific campaigns from August 27th. First Futures purchase within 24 hours of go-live.</p>
+  </div>
+  <div class="two-col">
+    <div class="info-card" style="border-left:3px solid var(--orange)">
+      <h3 style="color:var(--orange)">CFDs</h3>
+      <div class="detail-row"><div class="detail-label">Spend</div><div class="detail-text">$1,541</div></div>
+      <div class="detail-row"><div class="detail-label">Impressions</div><div class="detail-text">375,881</div></div>
+      <div class="detail-row"><div class="detail-label">Reach</div><div class="detail-text">130,389</div></div>
+      <div class="detail-row"><div class="detail-label">Clicks</div><div class="detail-text">601</div></div>
+      <div class="detail-row"><div class="detail-label">Sessions</div><div class="detail-text">302</div></div>
+      <div class="detail-row"><div class="detail-label">Purchases</div><div class="detail-text">0 <span style="color:var(--text-muted);font-size:12px">(early stage)</span></div></div>
+    </div>
+    <div class="info-card" style="border-left:3px solid var(--green)">
+      <h3 style="color:var(--green)">Futures</h3>
+      <div class="detail-row"><div class="detail-label">Spend</div><div class="detail-text">$304</div></div>
+      <div class="detail-row"><div class="detail-label">Impressions</div><div class="detail-text">81,630</div></div>
+      <div class="detail-row"><div class="detail-label">Reach</div><div class="detail-text">50,940</div></div>
+      <div class="detail-row"><div class="detail-label">Clicks</div><div class="detail-text">170</div></div>
+      <div class="detail-row"><div class="detail-label">Sessions</div><div class="detail-text">111</div></div>
+      <div class="detail-row"><div class="detail-label">Purchases</div><div class="detail-text" style="color:var(--green);font-weight:600">5</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- AUGUST OFFERS & RETENTION -->
+<div class="section reveal" id="aug-offers">
+  <div class="section-header">
+    <span class="section-num">07</span>
+    <h2 class="section-title">Offers & Retention</h2>
+    <span class="section-sub">Active campaigns — August 2026</span>
+  </div>
+  <div class="strategy-grid">
+    <div class="strategy-card">
+      <h4>New User Offer</h4>
+      <p>25% discount on all CFD Stellar Models — new-user acquisition focused</p>
+      <div style="margin-top:12px;display:flex;flex-direction:column;gap:6px">
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted);font-size:12px">Purchases</span><span style="color:var(--green);font-weight:700">3,700</span></div>
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted);font-size:12px">Revenue</span><span style="color:var(--green);font-weight:700">$324,390</span></div>
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted);font-size:12px">ROAS</span><span style="color:var(--accent);font-weight:700">13x</span></div>
+      </div>
+    </div>
+    <div class="strategy-card">
+      <h4>August BOGO (48h)</h4>
+      <p>Buy One, Get One on all Stellar plans — limited 48-hour window</p>
+      <div style="margin-top:12px;display:flex;flex-direction:column;gap:6px">
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted);font-size:12px">Purchases</span><span style="color:var(--green);font-weight:700">404</span></div>
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted);font-size:12px">Revenue</span><span style="color:var(--green);font-weight:700">$89,770</span></div>
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted);font-size:12px">ROAS</span><span style="color:var(--accent);font-weight:700">11.3x</span></div>
+      </div>
+    </div>
+    <div class="strategy-card">
+      <h4>Independence Day BOGO</h4>
+      <p>BOGO offer for Independence Day — India & Pakistan only</p>
+      <div style="margin-top:12px;display:flex;flex-direction:column;gap:6px">
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted);font-size:12px">Purchases</span><span style="color:var(--green);font-weight:700">261</span></div>
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted);font-size:12px">Revenue</span><span style="color:var(--green);font-weight:700">$37,530</span></div>
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted);font-size:12px">ROAS</span><span style="color:var(--accent);font-weight:700">27.7x</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AUGUST SECOND PURCHASE & CHURN -->
+<div class="section reveal" id="aug-retention">
+  <div class="section-header">
+    <span class="section-num">08</span>
+    <h2 class="section-title">Second Purchase & Churn Recovery</h2>
+    <span class="section-sub">Retention campaigns — August 2026</span>
+  </div>
+  <div class="two-col">
+    <div class="info-card" style="border-left:3px solid var(--accent)">
+      <h3 style="color:var(--accent)">Second Purchase</h3>
+      <div class="detail-row"><div class="detail-label">Purchases</div><div class="detail-text" style="color:var(--green);font-weight:700">17,678</div></div>
+      <div class="detail-row"><div class="detail-label">Amount Spent</div><div class="detail-text">$3,214</div></div>
+      <div class="detail-row"><div class="detail-label">Total Traffic</div><div class="detail-text">161,845</div></div>
+      <div class="detail-row"><div class="detail-label">CTR</div><div class="detail-text" style="color:var(--orange);font-weight:700">9.2%</div></div>
+    </div>
+    <div class="info-card" style="border-left:3px solid var(--purple)">
+      <h3 style="color:var(--purple)">Churn Recovery</h3>
+      <div class="detail-row"><div class="detail-label">Purchases</div><div class="detail-text" style="color:var(--green);font-weight:700">7,932</div></div>
+      <div class="detail-row"><div class="detail-label">Amount Spent</div><div class="detail-text">$2,645</div></div>
+      <div class="detail-row"><div class="detail-label">Total Traffic</div><div class="detail-text">158,028</div></div>
+      <div class="detail-row"><div class="detail-label">CTR</div><div class="detail-text" style="color:var(--orange);font-weight:700">14.1%</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- AUGUST CLEVERTAP -->
+<div class="section reveal" id="aug-clevertap">
+  <div class="section-header">
+    <span class="section-num">09</span>
+    <h2 class="section-title">CleverTap — Web Push Notification Journey</h2>
+    <span class="section-sub">Automated three-stage lifecycle</span>
+  </div>
+  <div class="journey">
+    <div class="journey-stage" style="border-top:3px solid var(--green)">
+      <div class="stage-num" style="background:var(--green-glow);color:var(--green)">1</div>
+      <h4>Acquisition</h4>
+      <div class="stage-status" style="color:var(--green)">LIVE</div>
+      <p>Refreshed all images across 3 acquisition journeys. Messaging leans on platform credibility and trader success stories with a limited-time incentive to drive registration.</p>
+      <div class="stage-stat">9,840 signups in August 2026</div>
+    </div>
+    <div class="journey-stage" style="border-top:3px solid var(--orange)">
+      <div class="stage-num" style="background:var(--orange-glow);color:var(--orange)">2</div>
+      <h4>Conversion</h4>
+      <div class="stage-status" style="color:var(--orange)">IN PROGRESS</div>
+      <p>Triggered post-signup for non-purchasers. Covers platform education and challenge walkthrough, closing with a limited-time first-purchase offer. Journey planned — implementation in progress.</p>
+    </div>
+    <div class="journey-stage" style="border-top:3px solid var(--orange)">
+      <div class="stage-num" style="background:var(--orange-glow);color:var(--orange)">3</div>
+      <h4>Retention</h4>
+      <div class="stage-status" style="color:var(--orange)">PLANNED</div>
+      <p>Triggered after first purchase. Reinforces decision, introduces higher-tier plans, presents a time-limited offer to drive repurchase. Evaluating audience inclusion/exclusion criteria.</p>
+    </div>
+  </div>
+  <div class="direction-banner" style="margin-top:16px">
+    <h4>Exit Condition</h4>
+    <p>User completes target action &rarr; exited and entered into next stage immediately</p>
+  </div>
+</div>
+
+<div class="footer">
+  <p>Media Performance Report — August 2026 &nbsp;|&nbsp; FundedNext &nbsp;|&nbsp; Confidential</p>
+</div>
+
+</div><!-- end august-content -->
+
 </div><!-- end .main -->
 
 <script>
+// ═══ MONTH SWITCHER ═══
+const julyNavLinks = [
+  {href:'#overview',text:'Overview'},{href:'#platforms',text:'Platforms'},
+  {href:'#china',text:'China'},{href:'#twitter',text:'Twitter'},
+  {href:'#flex',text:'Flex'},{href:'#rtm',text:'RTM'},
+  {href:'#seo',text:'SEO'},{href:'#strategy',text:'Strategy'},
+  {href:'#clevertap',text:'CleverTap'},{href:'#blockers',text:'Blockers'}
+];
+const augustNavLinks = [
+  {href:'#aug-overview',text:'Overview'},{href:'#aug-platforms',text:'Platforms'},
+  {href:'#aug-twitter',text:'Twitter'},{href:'#aug-flex',text:'Flex'},
+  {href:'#aug-rapid',text:'Rapid Pro'},{href:'#aug-rtm',text:'RTM'},
+  {href:'#aug-reddit',text:'Reddit'},{href:'#aug-offers',text:'Offers'},
+  {href:'#aug-retention',text:'2nd Purchase'},{href:'#aug-clevertap',text:'CleverTap'}
+];
+function setNavLinks(links) {
+  const ul = document.querySelector('.nav-links');
+  const mob = document.getElementById('mobileMenu');
+  ul.innerHTML = links.map(l=>`<li><a href="${l.href}">${l.text}</a></li>`).join('');
+  mob.innerHTML = links.map(l=>`<a href="${l.href}">${l.text}</a>`).join('');
+  mob.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      document.getElementById('menuBtn').classList.remove('open');
+      mob.classList.remove('open');
+    });
+  });
+}
+let augChartsInit = false;
+document.querySelectorAll('.month-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const month = btn.dataset.month;
+    document.querySelectorAll('.month-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.month-report').forEach(r => r.classList.remove('active'));
+    document.getElementById(month + '-content').classList.add('active');
+    if (month === 'august') {
+      setNavLinks(augustNavLinks);
+      // Trigger reveal for august sections
+      document.querySelectorAll('#august-content .reveal').forEach(el => {
+        if (!el.classList.contains('visible')) observer.observe(el);
+      });
+      // Init august charts once
+      if (!augChartsInit) { initAugCharts(); augChartsInit = true; }
+      // Animate counters in august
+      document.querySelectorAll('#august-content [data-count]').forEach(el => {
+        animateCount(el, parseInt(el.dataset.count));
+      });
+    } else {
+      setNavLinks(julyNavLinks);
+    }
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  });
+});
+
 // ═══ MOBILE MENU ═══
 const menuBtn = document.getElementById('menuBtn');
 const mobileMenu = document.getElementById('mobileMenu');
@@ -1541,7 +1975,7 @@ const barLabelPlugin = {
     const ctx = chart.ctx;
     chart.data.datasets.forEach((dataset, i) => {
       const meta = chart.getDatasetMeta(i);
-      const isRevenue = chart.canvas.id === 'chartRevenue';
+      const isRevenue = chart.canvas.id === 'chartRevenue' || chart.canvas.id === 'chartAugRevenue';
       meta.data.forEach((bar, index) => {
         const raw = dataset.data[index];
         let label;
@@ -1622,6 +2056,49 @@ new Chart(document.getElementById('chartRevenue'), {
     }
   }
 });
+// ═══ AUGUST CHARTS ═══
+function initAugCharts() {
+  new Chart(document.getElementById('chartAugPurchases'), {
+    type: 'bar',
+    data: {
+      labels: ['Google','Bing','Meta','Twitter','DV360','TikTok'],
+      datasets: [{
+        data: [87670,12724,7702,1828,874,699],
+        backgroundColor: ['#4285f4','#00a4ef','#1877f2','#1da1f2','#669df6','#ff0050'],
+        borderRadius: 6, borderSkipped: false,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      layout: { padding: { top: 24 } },
+      plugins: { legend: { display: false }, tooltip: { enabled: false } },
+      scales: {
+        x: { grid: { display: false }, border: { display: false } },
+        y: { display: false, grid: { display: false } }
+      }
+    }
+  });
+  new Chart(document.getElementById('chartAugRevenue'), {
+    type: 'bar',
+    data: {
+      labels: ['Google','Bing','Meta','Twitter','DV360','TikTok'],
+      datasets: [{
+        data: [12707400,1887993,1101817,289015,108958,99938],
+        backgroundColor: ['#22c55e','#22c55e','#22c55e','#22c55e','#22c55e','#22c55e'],
+        borderRadius: 6, borderSkipped: false,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      layout: { padding: { top: 24 } },
+      plugins: { legend: { display: false }, tooltip: { enabled: false } },
+      scales: {
+        x: { grid: { display: false }, border: { display: false } },
+        y: { display: false, grid: { display: false } }
+      }
+    }
+  });
+}
 </script>
 </body>
 </html>
