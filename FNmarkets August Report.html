@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>FNMarkets · Jul vs Aug 2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', system-ui, -apple-system, sans-serif; background: #0A0F1E; color: #E2E8F0; min-height: 100vh; }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: #0F172A; }
+  ::-webkit-scrollbar-thumb { background: #1E293B; border-radius: 3px; }
+  input::placeholder { color: #475569; }
+  input:focus { border-color: #334155 !important; }
+  button { transition: opacity 0.15s; }
+  button:hover { opacity: 0.9; }
+</style>
+</head>
+<body>
+<a href="/" id="back-btn" style="position:fixed;top:16px;left:16px;z-index:9999;display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:10px;background:rgba(15,23,42,0.9);border:1px solid rgba(255,255,255,0.12);color:#e2e8f0;font-size:13px;font-weight:600;text-decoration:none;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transition:all 0.2s;" onmouseover="this.style.background='rgba(30,41,59,0.95)';this.style.borderColor='rgba(255,255,255,0.22)'" onmouseout="this.style.background='rgba(15,23,42,0.9)';this.style.borderColor='rgba(255,255,255,0.12)'">&#8592; FundedNext Report</a>
+<div id="root"></div>
+<script type="text/babel">
+
+const { useState, useMemo } = React;
+
+const MAU_DATA      = [{"Country": "Algeria", "jul_active": 80381.0, "jul_new": 79152.0, "jul_sess": 111850.0, "jul_bounce": 0.76, "aug_active": 187536.0, "aug_new": 182504.0, "aug_sess": 281027.0, "aug_bounce": 0.76, "active_chg": 133.3, "new_chg": 130.6, "sess_chg": 151.3}, {"Country": "India", "jul_active": 342246.0, "jul_new": 332038.0, "jul_sess": 459317.0, "jul_bounce": 0.75, "aug_active": 70973.0, "aug_new": 67989.0, "aug_sess": 90930.0, "aug_bounce": 0.58, "active_chg": -79.3, "new_chg": -79.5, "sess_chg": -80.2}, {"Country": "Pakistan", "jul_active": 103347.0, "jul_new": 99511.0, "jul_sess": 151281.0, "jul_bounce": 0.65, "aug_active": 66771.0, "aug_new": 63859.0, "aug_sess": 101909.0, "aug_bounce": 0.61, "active_chg": -35.4, "new_chg": -35.8, "sess_chg": -32.6}, {"Country": "Laos", "jul_active": 20857.0, "jul_new": 20307.0, "jul_sess": 32837.0, "jul_bounce": 0.75, "aug_active": 24541.0, "aug_new": 23703.0, "aug_sess": 35234.0, "aug_bounce": 0.76, "active_chg": 17.7, "new_chg": 16.7, "sess_chg": 7.3}, {"Country": "Bolivia", "jul_active": 11241.0, "jul_new": 11086.0, "jul_sess": 16432.0, "jul_bounce": 0.69, "aug_active": 20922.0, "aug_new": 20067.0, "aug_sess": 38268.0, "aug_bounce": 0.7, "active_chg": 86.1, "new_chg": 81.0, "sess_chg": 132.9}, {"Country": "Jordan", "jul_active": 14462.0, "jul_new": 14442.0, "jul_sess": 21911.0, "jul_bounce": 0.71, "aug_active": 20471.0, "aug_new": 19733.0, "aug_sess": 34003.0, "aug_bounce": 0.72, "active_chg": 41.6, "new_chg": 36.6, "sess_chg": 55.2}, {"Country": "Senegal", "jul_active": 7673.0, "jul_new": 7451.0, "jul_sess": 11391.0, "jul_bounce": 0.75, "aug_active": 19720.0, "aug_new": 19147.0, "aug_sess": 34168.0, "aug_bounce": 0.73, "active_chg": 157.0, "new_chg": 157.0, "sess_chg": 200.0}, {"Country": "Nigeria", "jul_active": 5525.0, "jul_new": 4795.0, "jul_sess": 10032.0, "jul_bounce": 0.47, "aug_active": 17293.0, "aug_new": 16964.0, "aug_sess": 22375.0, "aug_bounce": 0.56, "active_chg": 213.0, "new_chg": 253.8, "sess_chg": 123.0}, {"Country": "Cambodia", "jul_active": 21272.0, "jul_new": 20579.0, "jul_sess": 31200.0, "jul_bounce": 0.73, "aug_active": 16264.0, "aug_new": 15388.0, "aug_sess": 23190.0, "aug_bounce": 0.7, "active_chg": -23.5, "new_chg": -25.2, "sess_chg": -25.7}, {"Country": "Morocco", "jul_active": 42425.0, "jul_new": 40483.0, "jul_sess": 78935.0, "jul_bounce": 0.68, "aug_active": 16165.0, "aug_new": 15322.0, "aug_sess": 22305.0, "aug_bounce": 0.67, "active_chg": -61.9, "new_chg": -62.2, "sess_chg": -71.7}, {"Country": "Brazil", "jul_active": 13271.0, "jul_new": 13222.0, "jul_sess": 15793.0, "jul_bounce": 0.64, "aug_active": 12120.0, "aug_new": 11975.0, "aug_sess": 13874.0, "aug_bounce": 0.68, "active_chg": -8.7, "new_chg": -9.4, "sess_chg": -12.2}, {"Country": "South Africa", "jul_active": 10335.0, "jul_new": 10036.0, "jul_sess": 14494.0, "jul_bounce": 0.65, "aug_active": 11479.0, "aug_new": 11079.0, "aug_sess": 15916.0, "aug_bounce": 0.65, "active_chg": 11.1, "new_chg": 10.4, "sess_chg": 9.8}, {"Country": "Libya", "jul_active": 5576.0, "jul_new": 5523.0, "jul_sess": 7537.0, "jul_bounce": 0.8, "aug_active": 11329.0, "aug_new": 11175.0, "aug_sess": 16242.0, "aug_bounce": 0.77, "active_chg": 103.2, "new_chg": 102.3, "sess_chg": 115.5}, {"Country": "Cameroon", "jul_active": 1898.0, "jul_new": 1835.0, "jul_sess": 3384.0, "jul_bounce": 0.73, "aug_active": 9629.0, "aug_new": 9356.0, "aug_sess": 15856.0, "aug_bounce": 0.73, "active_chg": 407.3, "new_chg": 409.9, "sess_chg": 368.6}, {"Country": "T\u00fcrkiye", "jul_active": 1719.0, "jul_new": 1657.0, "jul_sess": 2308.0, "jul_bounce": 0.66, "aug_active": 9021.0, "aug_new": 8871.0, "aug_sess": 11146.0, "aug_bounce": 0.8, "active_chg": 424.8, "new_chg": 435.4, "sess_chg": 382.9}, {"Country": "Tanzania", "jul_active": 5333.0, "jul_new": 5109.0, "jul_sess": 10018.0, "jul_bounce": 0.73, "aug_active": 7654.0, "aug_new": 7195.0, "aug_sess": 16037.0, "aug_bounce": 0.74, "active_chg": 43.5, "new_chg": 40.8, "sess_chg": 60.1}, {"Country": "Lebanon", "jul_active": 19895.0, "jul_new": 19415.0, "jul_sess": 31596.0, "jul_bounce": 0.76, "aug_active": 7133.0, "aug_new": 6600.0, "aug_sess": 15075.0, "aug_bounce": 0.74, "active_chg": -64.1, "new_chg": -66.0, "sess_chg": -52.3}, {"Country": "Dominican Republic", "jul_active": 5308.0, "jul_new": 5230.0, "jul_sess": 6924.0, "jul_bounce": 0.64, "aug_active": 7007.0, "aug_new": 6798.0, "aug_sess": 12388.0, "aug_bounce": 0.66, "active_chg": 32.0, "new_chg": 30.0, "sess_chg": 78.9}, {"Country": "Philippines", "jul_active": 3080.0, "jul_new": 2975.0, "jul_sess": 3931.0, "jul_bounce": 0.56, "aug_active": 6849.0, "aug_new": 6656.0, "aug_sess": 8827.0, "aug_bounce": 0.59, "active_chg": 122.4, "new_chg": 123.7, "sess_chg": 124.5}, {"Country": "Kenya", "jul_active": 15664.0, "jul_new": 14813.0, "jul_sess": 23053.0, "jul_bounce": 0.58, "aug_active": 6470.0, "aug_new": 6150.0, "aug_sess": 8907.0, "aug_bounce": 0.47, "active_chg": -58.7, "new_chg": -58.5, "sess_chg": -61.4}, {"Country": "Rwanda", "jul_active": 4475.0, "jul_new": 4297.0, "jul_sess": 8040.0, "jul_bounce": 0.74, "aug_active": 5396.0, "aug_new": 5005.0, "aug_sess": 12225.0, "aug_bounce": 0.74, "active_chg": 20.6, "new_chg": 16.5, "sess_chg": 52.1}, {"Country": "Uganda", "jul_active": 1881.0, "jul_new": 1776.0, "jul_sess": 2957.0, "jul_bounce": 0.62, "aug_active": 4625.0, "aug_new": 4402.0, "aug_sess": 8172.0, "aug_bounce": 0.7, "active_chg": 145.9, "new_chg": 147.9, "sess_chg": 176.4}, {"Country": "Mongolia", "jul_active": 4191.0, "jul_new": 3973.0, "jul_sess": 12864.0, "jul_bounce": 0.77, "aug_active": 4197.0, "aug_new": 3763.0, "aug_sess": 10602.0, "aug_bounce": 0.76, "active_chg": 0.1, "new_chg": -5.3, "sess_chg": -17.6}, {"Country": "Madagascar", "jul_active": 3102.0, "jul_new": 3045.0, "jul_sess": 4194.0, "jul_bounce": 0.68, "aug_active": 3841.0, "aug_new": 3753.0, "aug_sess": 5833.0, "aug_bounce": 0.69, "active_chg": 23.8, "new_chg": 23.3, "sess_chg": 39.1}, {"Country": "Sierra Leone", "jul_active": 1379.0, "jul_new": 1326.0, "jul_sess": 2247.0, "jul_bounce": 0.8, "aug_active": 3819.0, "aug_new": 3694.0, "aug_sess": 7328.0, "aug_bounce": 0.74, "active_chg": 176.9, "new_chg": 178.6, "sess_chg": 226.1}, {"Country": "Burkina Faso", "jul_active": 1533.0, "jul_new": 1524.0, "jul_sess": 1861.0, "jul_bounce": 0.76, "aug_active": 3696.0, "aug_new": 3659.0, "aug_sess": 4666.0, "aug_bounce": 0.76, "active_chg": 141.1, "new_chg": 140.1, "sess_chg": 150.7}, {"Country": "Uzbekistan", "jul_active": 3142.0, "jul_new": 3002.0, "jul_sess": 4741.0, "jul_bounce": 0.58, "aug_active": 3689.0, "aug_new": 3554.0, "aug_sess": 4658.0, "aug_bounce": 0.64, "active_chg": 17.4, "new_chg": 18.4, "sess_chg": -1.8}, {"Country": "Paraguay", "jul_active": 1817.0, "jul_new": 1789.0, "jul_sess": 2720.0, "jul_bounce": 0.73, "aug_active": 3663.0, "aug_new": 3593.0, "aug_sess": 6702.0, "aug_bounce": 0.68, "active_chg": 101.6, "new_chg": 100.8, "sess_chg": 146.4}, {"Country": "Argentina", "jul_active": 3693.0, "jul_new": 3500.0, "jul_sess": 5202.0, "jul_bounce": 0.65, "aug_active": 3651.0, "aug_new": 3569.0, "aug_sess": 4686.0, "aug_bounce": 0.72, "active_chg": -1.1, "new_chg": 2.0, "sess_chg": -9.9}, {"Country": "Angola", "jul_active": 1468.0, "jul_new": 1406.0, "jul_sess": 3025.0, "jul_bounce": 0.65, "aug_active": 3452.0, "aug_new": 3344.0, "aug_sess": 5448.0, "aug_bounce": 0.7, "active_chg": 135.1, "new_chg": 137.8, "sess_chg": 80.1}, {"Country": "Bhutan", "jul_active": 1517.0, "jul_new": 1514.0, "jul_sess": 2120.0, "jul_bounce": 0.69, "aug_active": 3296.0, "aug_new": 3175.0, "aug_sess": 5106.0, "aug_bounce": 0.66, "active_chg": 117.3, "new_chg": 109.7, "sess_chg": 140.8}, {"Country": "Togo", "jul_active": 1484.0, "jul_new": 1428.0, "jul_sess": 2494.0, "jul_bounce": 0.68, "aug_active": 3118.0, "aug_new": 3041.0, "aug_sess": 5209.0, "aug_bounce": 0.72, "active_chg": 110.1, "new_chg": 113.0, "sess_chg": 108.9}, {"Country": "Fiji", "jul_active": 2647.0, "jul_new": 2570.0, "jul_sess": 3954.0, "jul_bounce": 0.71, "aug_active": 3043.0, "aug_new": 2943.0, "aug_sess": 5074.0, "aug_bounce": 0.71, "active_chg": 15.0, "new_chg": 14.5, "sess_chg": 28.3}, {"Country": "Papua New Guinea", "jul_active": 1360.0, "jul_new": 1320.0, "jul_sess": 2431.0, "jul_bounce": 0.74, "aug_active": 2683.0, "aug_new": 2611.0, "aug_sess": 3561.0, "aug_bounce": 0.57, "active_chg": 97.3, "new_chg": 97.8, "sess_chg": 46.5}, {"Country": "Saudi Arabia", "jul_active": 3753.0, "jul_new": 3624.0, "jul_sess": 5344.0, "jul_bounce": 0.68, "aug_active": 2535.0, "aug_new": 2457.0, "aug_sess": 3355.0, "aug_bounce": 0.6, "active_chg": -32.5, "new_chg": -32.2, "sess_chg": -37.2}, {"Country": "Ghana", "jul_active": 3193.0, "jul_new": 3129.0, "jul_sess": 4093.0, "jul_bounce": 0.53, "aug_active": 2327.0, "aug_new": 2226.0, "aug_sess": 4205.0, "aug_bounce": 0.63, "active_chg": -27.1, "new_chg": -28.9, "sess_chg": 2.7}, {"Country": "United Arab Emirates", "jul_active": 11439.0, "jul_new": 10982.0, "jul_sess": 17388.0, "jul_bounce": 0.71, "aug_active": 1965.0, "aug_new": 1802.0, "aug_sess": 2811.0, "aug_bounce": 0.45, "active_chg": -82.8, "new_chg": -83.6, "sess_chg": -83.8}, {"Country": "Liberia", "jul_active": 1370.0, "jul_new": 1358.0, "jul_sess": 1748.0, "jul_bounce": 0.69, "aug_active": 1899.0, "aug_new": 1860.0, "aug_sess": 2889.0, "aug_bounce": 0.72, "active_chg": 38.6, "new_chg": 37.0, "sess_chg": 65.3}, {"Country": "Gambia", "jul_active": 939.0, "jul_new": 920.0, "jul_sess": 1421.0, "jul_bounce": 0.76, "aug_active": 1825.0, "aug_new": 1758.0, "aug_sess": 3253.0, "aug_bounce": 0.73, "active_chg": 94.4, "new_chg": 91.1, "sess_chg": 128.9}, {"Country": "Malawi", "jul_active": 812.0, "jul_new": 806.0, "jul_sess": 1024.0, "jul_bounce": 0.74, "aug_active": 1777.0, "aug_new": 1738.0, "aug_sess": 2441.0, "aug_bounce": 0.72, "active_chg": 118.8, "new_chg": 115.6, "sess_chg": 138.4}, {"Country": "Kyrgyzstan", "jul_active": 1263.0, "jul_new": 1233.0, "jul_sess": 1952.0, "jul_bounce": 0.69, "aug_active": 1699.0, "aug_new": 1654.0, "aug_sess": 2403.0, "aug_bounce": 0.73, "active_chg": 34.5, "new_chg": 34.1, "sess_chg": 23.1}, {"Country": "Chad", "jul_active": 1003.0, "jul_new": 1000.0, "jul_sess": 1218.0, "jul_bounce": 0.69, "aug_active": 1697.0, "aug_new": 1677.0, "aug_sess": 2205.0, "aug_bounce": 0.69, "active_chg": 69.2, "new_chg": 67.7, "sess_chg": 81.0}, {"Country": "Ethiopia", "jul_active": 926.0, "jul_new": 852.0, "jul_sess": 1457.0, "jul_bounce": 0.29, "aug_active": 1514.0, "aug_new": 1388.0, "aug_sess": 2230.0, "aug_bounce": 0.32, "active_chg": 63.5, "new_chg": 62.9, "sess_chg": 53.1}, {"Country": "El Salvador", "jul_active": 528.0, "jul_new": 519.0, "jul_sess": 619.0, "jul_bounce": 0.62, "aug_active": 1478.0, "aug_new": 1457.0, "aug_sess": 2167.0, "aug_bounce": 0.68, "active_chg": 179.9, "new_chg": 180.7, "sess_chg": 250.1}, {"Country": "Tajikistan", "jul_active": 1640.0, "jul_new": 1626.0, "jul_sess": 2401.0, "jul_bounce": 0.73, "aug_active": 1477.0, "aug_new": 1442.0, "aug_sess": 2178.0, "aug_bounce": 0.74, "active_chg": -9.9, "new_chg": -11.3, "sess_chg": -9.3}, {"Country": "Benin", "jul_active": 1310.0, "jul_new": 1272.0, "jul_sess": 1953.0, "jul_bounce": 0.68, "aug_active": 1380.0, "aug_new": 1349.0, "aug_sess": 2078.0, "aug_bounce": 0.72, "active_chg": 5.3, "new_chg": 6.1, "sess_chg": 6.4}, {"Country": "Canada", "jul_active": 1043.0, "jul_new": 957.0, "jul_sess": 1880.0, "jul_bounce": 0.46, "aug_active": 1300.0, "aug_new": 1196.0, "aug_sess": 2105.0, "aug_bounce": 0.52, "active_chg": 24.6, "new_chg": 25.0, "sess_chg": 12.0}, {"Country": "Mexico", "jul_active": 1976.0, "jul_new": 1960.0, "jul_sess": 2409.0, "jul_bounce": 0.67, "aug_active": 1279.0, "aug_new": 1248.0, "aug_sess": 1709.0, "aug_bounce": 0.58, "active_chg": -35.3, "new_chg": -36.3, "sess_chg": -29.1}, {"Country": "Oman", "jul_active": 1346.0, "jul_new": 1313.0, "jul_sess": 1878.0, "jul_bounce": 0.69, "aug_active": 1157.0, "aug_new": 1104.0, "aug_sess": 1704.0, "aug_bounce": 0.67, "active_chg": -14.0, "new_chg": -15.9, "sess_chg": -9.3}, {"Country": "Japan", "jul_active": 1266.0, "jul_new": 1231.0, "jul_sess": 1450.0, "jul_bounce": 0.67, "aug_active": 1024.0, "aug_new": 980.0, "aug_sess": 1307.0, "aug_bounce": 0.59, "active_chg": -19.1, "new_chg": -20.4, "sess_chg": -9.9}, {"Country": "Mozambique", "jul_active": 730.0, "jul_new": 711.0, "jul_sess": 1293.0, "jul_bounce": 0.73, "aug_active": 1023.0, "aug_new": 960.0, "aug_sess": 1711.0, "aug_bounce": 0.7, "active_chg": 40.1, "new_chg": 35.0, "sess_chg": 32.3}, {"Country": "Egypt", "jul_active": 1072.0, "jul_new": 1038.0, "jul_sess": 1483.0, "jul_bounce": 0.65, "aug_active": 981.0, "aug_new": 946.0, "aug_sess": 1274.0, "aug_bounce": 0.58, "active_chg": -8.5, "new_chg": -8.9, "sess_chg": -14.1}, {"Country": "Australia", "jul_active": 448.0, "jul_new": 409.0, "jul_sess": 821.0, "jul_bounce": 0.37, "aug_active": 923.0, "aug_new": 861.0, "aug_sess": 1491.0, "aug_bounce": 0.48, "active_chg": 106.0, "new_chg": 110.5, "sess_chg": 81.6}, {"Country": "Zambia", "jul_active": 435.0, "jul_new": 420.0, "jul_sess": 562.0, "jul_bounce": 0.49, "aug_active": 920.0, "aug_new": 876.0, "aug_sess": 1258.0, "aug_bounce": 0.6, "active_chg": 111.5, "new_chg": 108.6, "sess_chg": 123.8}, {"Country": "Indonesia", "jul_active": 1004.0, "jul_new": 925.0, "jul_sess": 1428.0, "jul_bounce": 0.4, "aug_active": 907.0, "aug_new": 806.0, "aug_sess": 1340.0, "aug_bounce": 0.44, "active_chg": -9.7, "new_chg": -12.9, "sess_chg": -6.2}, {"Country": "Kazakhstan", "jul_active": 779.0, "jul_new": 770.0, "jul_sess": 957.0, "jul_bounce": 0.72, "aug_active": 873.0, "aug_new": 858.0, "aug_sess": 1075.0, "aug_bounce": 0.72, "active_chg": 12.1, "new_chg": 11.4, "sess_chg": 12.3}, {"Country": "Singapore", "jul_active": 941.0, "jul_new": 829.0, "jul_sess": 1281.0, "jul_bounce": 0.59, "aug_active": 728.0, "aug_new": 649.0, "aug_sess": 1054.0, "aug_bounce": 0.49, "active_chg": -22.6, "new_chg": -21.7, "sess_chg": -17.7}, {"Country": "Jamaica", "jul_active": 609.0, "jul_new": 591.0, "jul_sess": 792.0, "jul_bounce": 0.53, "aug_active": 638.0, "aug_new": 607.0, "aug_sess": 935.0, "aug_bounce": 0.59, "active_chg": 4.8, "new_chg": 2.7, "sess_chg": 18.1}, {"Country": "Colombia", "jul_active": 296.0, "jul_new": 268.0, "jul_sess": 496.0, "jul_bounce": 0.41, "aug_active": 597.0, "aug_new": 561.0, "aug_sess": 813.0, "aug_bounce": 0.39, "active_chg": 101.7, "new_chg": 109.3, "sess_chg": 63.9}, {"Country": "Nepal", "jul_active": 774.0, "jul_new": 717.0, "jul_sess": 1030.0, "jul_bounce": 0.54, "aug_active": 520.0, "aug_new": 477.0, "aug_sess": 690.0, "aug_bounce": 0.41, "active_chg": -32.8, "new_chg": -33.5, "sess_chg": -33.0}, {"Country": "Azerbaijan", "jul_active": 239.0, "jul_new": 224.0, "jul_sess": 278.0, "jul_bounce": 0.36, "aug_active": 487.0, "aug_new": 462.0, "aug_sess": 539.0, "aug_bounce": 0.46, "active_chg": 103.8, "new_chg": 106.2, "sess_chg": 93.9}, {"Country": "China", "jul_active": 318.0, "jul_new": 305.0, "jul_sess": 384.0, "jul_bounce": 0.6, "aug_active": 480.0, "aug_new": 447.0, "aug_sess": 617.0, "aug_bounce": 0.49, "active_chg": 50.9, "new_chg": 46.6, "sess_chg": 60.7}, {"Country": "Trinidad & Tobago", "jul_active": 320.0, "jul_new": 304.0, "jul_sess": 410.0, "jul_bounce": 0.53, "aug_active": 480.0, "aug_new": 471.0, "aug_sess": 775.0, "aug_bounce": 0.66, "active_chg": 50.0, "new_chg": 54.9, "sess_chg": 89.0}, {"Country": "Kuwait", "jul_active": 409.0, "jul_new": 407.0, "jul_sess": 562.0, "jul_bounce": 0.66, "aug_active": 450.0, "aug_new": 436.0, "aug_sess": 709.0, "aug_bounce": 0.61, "active_chg": 10.0, "new_chg": 7.1, "sess_chg": 26.2}, {"Country": "Bangladesh", "jul_active": 326.0, "jul_new": 225.0, "jul_sess": 3898.0, "jul_bounce": 0.26, "aug_active": 449.0, "aug_new": 348.0, "aug_sess": 3648.0, "aug_bounce": 0.28, "active_chg": 37.7, "new_chg": 54.7, "sess_chg": -6.4}, {"Country": "Ecuador", "jul_active": 143.0, "jul_new": 137.0, "jul_sess": 184.0, "jul_bounce": 0.43, "aug_active": 439.0, "aug_new": 417.0, "aug_sess": 531.0, "aug_bounce": 0.43, "active_chg": 207.0, "new_chg": 204.4, "sess_chg": 188.6}, {"Country": "Qatar", "jul_active": 406.0, "jul_new": 387.0, "jul_sess": 548.0, "jul_bounce": 0.52, "aug_active": 431.0, "aug_new": 415.0, "aug_sess": 594.0, "aug_bounce": 0.48, "active_chg": 6.2, "new_chg": 7.2, "sess_chg": 8.4}, {"Country": "Hong Kong", "jul_active": 193.0, "jul_new": 167.0, "jul_sess": 321.0, "jul_bounce": 0.35, "aug_active": 406.0, "aug_new": 358.0, "aug_sess": 610.0, "aug_bounce": 0.37, "active_chg": 110.4, "new_chg": 114.4, "sess_chg": 90.0}, {"Country": "United States", "jul_active": 186.0, "jul_new": 167.0, "jul_sess": 267.0, "jul_bounce": 0.63, "aug_active": 395.0, "aug_new": 374.0, "aug_sess": 440.0, "aug_bounce": 0.7, "active_chg": 112.4, "new_chg": 124.0, "sess_chg": 64.8}, {"Country": "(not set)", "jul_active": 655.0, "jul_new": 621.0, "jul_sess": 937.0, "jul_bounce": 0.66, "aug_active": 394.0, "aug_new": 365.0, "aug_sess": 583.0, "aug_bounce": 0.66, "active_chg": -39.8, "new_chg": -41.2, "sess_chg": -37.8}, {"Country": "France", "jul_active": 344.0, "jul_new": 277.0, "jul_sess": 519.0, "jul_bounce": 0.7, "aug_active": 387.0, "aug_new": 299.0, "aug_sess": 562.0, "aug_bounce": 0.7, "active_chg": 12.5, "new_chg": 7.9, "sess_chg": 8.3}, {"Country": "C\u00f4te d\u2019Ivoire", "jul_active": 487.0, "jul_new": 477.0, "jul_sess": 568.0, "jul_bounce": 0.62, "aug_active": 343.0, "aug_new": 315.0, "aug_sess": 468.0, "aug_bounce": 0.49, "active_chg": -29.6, "new_chg": -34.0, "sess_chg": -17.6}, {"Country": "Israel", "jul_active": 608.0, "jul_new": 596.0, "jul_sess": 658.0, "jul_bounce": 0.85, "aug_active": 297.0, "aug_new": 273.0, "aug_sess": 383.0, "aug_bounce": 0.55, "active_chg": -51.2, "new_chg": -54.2, "sess_chg": -41.8}, {"Country": "Maldives", "jul_active": 232.0, "jul_new": 230.0, "jul_sess": 299.0, "jul_bounce": 0.59, "aug_active": 273.0, "aug_new": 260.0, "aug_sess": 434.0, "aug_bounce": 0.56, "active_chg": 17.7, "new_chg": 13.0, "sess_chg": 45.2}, {"Country": "Germany", "jul_active": 295.0, "jul_new": 219.0, "jul_sess": 410.0, "jul_bounce": 0.63, "aug_active": 262.0, "aug_new": 194.0, "aug_sess": 387.0, "aug_bounce": 0.65, "active_chg": -11.2, "new_chg": -11.4, "sess_chg": -5.6}, {"Country": "Lesotho", "jul_active": 91.0, "jul_new": 88.0, "jul_sess": 125.0, "jul_bounce": 0.44, "aug_active": 254.0, "aug_new": 243.0, "aug_sess": 342.0, "aug_bounce": 0.63, "active_chg": 179.1, "new_chg": 176.1, "sess_chg": 173.6}, {"Country": "Peru", "jul_active": 124.0, "jul_new": 117.0, "jul_sess": 177.0, "jul_bounce": 0.48, "aug_active": 246.0, "aug_new": 230.0, "aug_sess": 328.0, "aug_bounce": 0.38, "active_chg": 98.4, "new_chg": 96.6, "sess_chg": 85.3}, {"Country": "Chile", "jul_active": 97.0, "jul_new": 91.0, "jul_sess": 145.0, "jul_bounce": 0.42, "aug_active": 245.0, "aug_new": 233.0, "aug_sess": 323.0, "aug_bounce": 0.45, "active_chg": 152.6, "new_chg": 156.0, "sess_chg": 122.8}, {"Country": "Bahrain", "jul_active": 272.0, "jul_new": 262.0, "jul_sess": 351.0, "jul_bounce": 0.53, "aug_active": 238.0, "aug_new": 227.0, "aug_sess": 302.0, "aug_bounce": 0.49, "active_chg": -12.5, "new_chg": -13.4, "sess_chg": -14.0}, {"Country": "South Korea", "jul_active": 115.0, "jul_new": 101.0, "jul_sess": 145.0, "jul_bounce": 0.41, "aug_active": 216.0, "aug_new": 193.0, "aug_sess": 360.0, "aug_bounce": 0.46, "active_chg": 87.8, "new_chg": 91.1, "sess_chg": 148.3}, {"Country": "Uruguay", "jul_active": 115.0, "jul_new": 114.0, "jul_sess": 126.0, "jul_bounce": 0.56, "aug_active": 199.0, "aug_new": 197.0, "aug_sess": 260.0, "aug_bounce": 0.62, "active_chg": 73.0, "new_chg": 72.8, "sess_chg": 106.3}, {"Country": "Thailand", "jul_active": 161.0, "jul_new": 142.0, "jul_sess": 266.0, "jul_bounce": 0.41, "aug_active": 197.0, "aug_new": 184.0, "aug_sess": 275.0, "aug_bounce": 0.4, "active_chg": 22.4, "new_chg": 29.6, "sess_chg": 3.4}, {"Country": "Panama", "jul_active": 184.0, "jul_new": 182.0, "jul_sess": 259.0, "jul_bounce": 0.64, "aug_active": 196.0, "aug_new": 191.0, "aug_sess": 248.0, "aug_bounce": 0.54, "active_chg": 6.5, "new_chg": 4.9, "sess_chg": -4.2}, {"Country": "Costa Rica", "jul_active": 199.0, "jul_new": 195.0, "jul_sess": 236.0, "jul_bounce": 0.66, "aug_active": 193.0, "aug_new": 189.0, "aug_sess": 258.0, "aug_bounce": 0.57, "active_chg": -3.0, "new_chg": -3.1, "sess_chg": 9.3}, {"Country": "Netherlands", "jul_active": 128.0, "jul_new": 87.0, "jul_sess": 175.0, "jul_bounce": 0.62, "aug_active": 187.0, "aug_new": 126.0, "aug_sess": 247.0, "aug_bounce": 0.62, "active_chg": 46.1, "new_chg": 44.8, "sess_chg": 41.1}, {"Country": "Namibia", "jul_active": 105.0, "jul_new": 99.0, "jul_sess": 157.0, "jul_bounce": 0.34, "aug_active": 185.0, "aug_new": 163.0, "aug_sess": 276.0, "aug_bounce": 0.42, "active_chg": 76.2, "new_chg": 64.6, "sess_chg": 75.8}, {"Country": "Taiwan", "jul_active": 99.0, "jul_new": 91.0, "jul_sess": 158.0, "jul_bounce": 0.41, "aug_active": 183.0, "aug_new": 165.0, "aug_sess": 257.0, "aug_bounce": 0.49, "active_chg": 84.8, "new_chg": 81.3, "sess_chg": 62.7}, {"Country": "Botswana", "jul_active": 97.0, "jul_new": 92.0, "jul_sess": 167.0, "jul_bounce": 0.26, "aug_active": 160.0, "aug_new": 148.0, "aug_sess": 223.0, "aug_bounce": 0.35, "active_chg": 64.9, "new_chg": 60.9, "sess_chg": 33.5}, {"Country": "New Zealand", "jul_active": 142.0, "jul_new": 128.0, "jul_sess": 235.0, "jul_bounce": 0.54, "aug_active": 145.0, "aug_new": 134.0, "aug_sess": 231.0, "aug_bounce": 0.42, "active_chg": 2.1, "new_chg": 4.7, "sess_chg": -1.7}, {"Country": "Palestine", "jul_active": 74.0, "jul_new": 70.0, "jul_sess": 99.0, "jul_bounce": 0.48, "aug_active": 135.0, "aug_new": 122.0, "aug_sess": 181.0, "aug_bounce": 0.55, "active_chg": 82.4, "new_chg": 74.3, "sess_chg": 82.8}, {"Country": "Russia", "jul_active": 172.0, "jul_new": 159.0, "jul_sess": 202.0, "jul_bounce": 0.57, "aug_active": 124.0, "aug_new": 114.0, "aug_sess": 167.0, "aug_bounce": 0.53, "active_chg": -27.9, "new_chg": -28.3, "sess_chg": -17.3}, {"Country": "Kosovo", "jul_active": 82.0, "jul_new": 73.0, "jul_sess": 106.0, "jul_bounce": 0.51, "aug_active": 119.0, "aug_new": 108.0, "aug_sess": 171.0, "aug_bounce": 0.47, "active_chg": 45.1, "new_chg": 47.9, "sess_chg": 61.3}, {"Country": "Malaysia", "jul_active": 128.0, "jul_new": 113.0, "jul_sess": 353.0, "jul_bounce": 0.44, "aug_active": 118.0, "aug_new": 86.0, "aug_sess": 434.0, "aug_bounce": 0.42, "active_chg": -7.8, "new_chg": -23.9, "sess_chg": 22.9}, {"Country": "Albania", "jul_active": 86.0, "jul_new": 76.0, "jul_sess": 119.0, "jul_bounce": 0.42, "aug_active": 109.0, "aug_new": 101.0, "aug_sess": 139.0, "aug_bounce": 0.45, "active_chg": 26.7, "new_chg": 32.9, "sess_chg": 16.8}, {"Country": "Armenia", "jul_active": 20.0, "jul_new": 20.0, "jul_sess": 33.0, "jul_bounce": 0.42, "aug_active": 97.0, "aug_new": 94.0, "aug_sess": 116.0, "aug_bounce": 0.5, "active_chg": 385.0, "new_chg": 370.0, "sess_chg": 251.5}, {"Country": "Bahamas", "jul_active": 60.0, "jul_new": 53.0, "jul_sess": 113.0, "jul_bounce": 0.32, "aug_active": 89.0, "aug_new": 84.0, "aug_sess": 125.0, "aug_bounce": 0.52, "active_chg": 48.3, "new_chg": 58.5, "sess_chg": 10.6}, {"Country": "Honduras", "jul_active": 21.0, "jul_new": 20.0, "jul_sess": 28.0, "jul_bounce": 0.54, "aug_active": 84.0, "aug_new": 82.0, "aug_sess": 119.0, "aug_bounce": 0.37, "active_chg": 300.0, "new_chg": 310.0, "sess_chg": 325.0}, {"Country": "Serbia", "jul_active": 37.0, "jul_new": 33.0, "jul_sess": 43.0, "jul_bounce": 0.37, "aug_active": 79.0, "aug_new": 77.0, "aug_sess": 107.0, "aug_bounce": 0.55, "active_chg": 113.5, "new_chg": 133.3, "sess_chg": 148.8}, {"Country": "Eswatini", "jul_active": 27.0, "jul_new": 25.0, "jul_sess": 43.0, "jul_bounce": 0.42, "aug_active": 79.0, "aug_new": 75.0, "aug_sess": 135.0, "aug_bounce": 0.59, "active_chg": 192.6, "new_chg": 200.0, "sess_chg": 214.0}, {"Country": "Hungary", "jul_active": 181.0, "jul_new": 166.0, "jul_sess": 304.0, "jul_bounce": 0.66, "aug_active": 77.0, "aug_new": 70.0, "aug_sess": 139.0, "aug_bounce": 0.68, "active_chg": -57.5, "new_chg": -57.8, "sess_chg": -54.3}, {"Country": "Mauritius", "jul_active": 29.0, "jul_new": 25.0, "jul_sess": 36.0, "jul_bounce": 0.31, "aug_active": 53.0, "aug_new": 50.0, "aug_sess": 82.0, "aug_bounce": 0.27, "active_chg": 82.8, "new_chg": 100.0, "sess_chg": 127.8}, {"Country": "United Kingdom", "jul_active": 138.0, "jul_new": 117.0, "jul_sess": 151.0, "jul_bounce": 0.91, "aug_active": 52.0, "aug_new": 18.0, "aug_sess": 73.0, "aug_bounce": 0.58, "active_chg": -62.3, "new_chg": -84.6, "sess_chg": -51.7}, {"Country": "North Macedonia", "jul_active": 20.0, "jul_new": 19.0, "jul_sess": 30.0, "jul_bounce": 0.53, "aug_active": 45.0, "aug_new": 43.0, "aug_sess": 61.0, "aug_bounce": 0.38, "active_chg": 125.0, "new_chg": 126.3, "sess_chg": 103.3}, {"Country": "Seychelles", "jul_active": 23.0, "jul_new": 23.0, "jul_sess": 33.0, "jul_bounce": 0.79, "aug_active": 44.0, "aug_new": 44.0, "aug_sess": 50.0, "aug_bounce": 0.64, "active_chg": 91.3, "new_chg": 91.3, "sess_chg": 51.5}, {"Country": "Puerto Rico", "jul_active": 12.0, "jul_new": 11.0, "jul_sess": 15.0, "jul_bounce": 0.4, "aug_active": 42.0, "aug_new": 42.0, "aug_sess": 54.0, "aug_bounce": 0.61, "active_chg": 250.0, "new_chg": 281.8, "sess_chg": 260.0}, {"Country": "Georgia", "jul_active": 42.0, "jul_new": 41.0, "jul_sess": 86.0, "jul_bounce": 0.36, "aug_active": 41.0, "aug_new": 39.0, "aug_sess": 90.0, "aug_bounce": 0.37, "active_chg": -2.4, "new_chg": -4.9, "sess_chg": 4.7}, {"Country": "Brunei", "jul_active": 50.0, "jul_new": 48.0, "jul_sess": 60.0, "jul_bounce": 0.57, "aug_active": 36.0, "aug_new": 34.0, "aug_sess": 56.0, "aug_bounce": 0.46, "active_chg": -28.0, "new_chg": -29.2, "sess_chg": -6.7}, {"Country": "Mauritania", "jul_active": 26.0, "jul_new": 23.0, "jul_sess": 64.0, "jul_bounce": 0.86, "aug_active": 36.0, "aug_new": 34.0, "aug_sess": 55.0, "aug_bounce": 0.73, "active_chg": 38.5, "new_chg": 47.8, "sess_chg": -14.1}, {"Country": "Bosnia & Herzegovina", "jul_active": 22.0, "jul_new": 20.0, "jul_sess": 23.0, "jul_bounce": 0.65, "aug_active": 33.0, "aug_new": 28.0, "aug_sess": 37.0, "aug_bounce": 0.49, "active_chg": 50.0, "new_chg": 40.0, "sess_chg": 60.9}, {"Country": "Suriname", "jul_active": 15.0, "jul_new": 14.0, "jul_sess": 22.0, "jul_bounce": 0.27, "aug_active": 25.0, "aug_new": 23.0, "aug_sess": 29.0, "aug_bounce": 0.34, "active_chg": 66.7, "new_chg": 64.3, "sess_chg": 31.8}, {"Country": "Belarus", "jul_active": 3.0, "jul_new": 2.0, "jul_sess": 5.0, "jul_bounce": 0.6, "aug_active": 24.0, "aug_new": 23.0, "aug_sess": 38.0, "aug_bounce": 0.53, "active_chg": 700.0, "new_chg": 1050.0, "sess_chg": 660.0}, {"Country": "Djibouti", "jul_active": 14.0, "jul_new": 14.0, "jul_sess": 19.0, "jul_bounce": 0.37, "aug_active": 19.0, "aug_new": 18.0, "aug_sess": 21.0, "aug_bounce": 0.24, "active_chg": 35.7, "new_chg": 28.6, "sess_chg": 10.5}, {"Country": "Barbados", "jul_active": 11.0, "jul_new": 10.0, "jul_sess": 24.0, "jul_bounce": 0.33, "aug_active": 17.0, "aug_new": 14.0, "aug_sess": 33.0, "aug_bounce": 0.39, "active_chg": 54.5, "new_chg": 40.0, "sess_chg": 37.5}, {"Country": "Vietnam", "jul_active": 22.0, "jul_new": 21.0, "jul_sess": 30.0, "jul_bounce": 0.47, "aug_active": 16.0, "aug_new": 14.0, "aug_sess": 45.0, "aug_bounce": 0.24, "active_chg": -27.3, "new_chg": -33.3, "sess_chg": 50.0}, {"Country": "Belgium", "jul_active": 1.0, "jul_new": 1.0, "jul_sess": 1.0, "jul_bounce": 1.0, "aug_active": 15.0, "aug_new": 14.0, "aug_sess": 16.0, "aug_bounce": 0.19, "active_chg": 1400.0, "new_chg": 1300.0, "sess_chg": 1500.0}, {"Country": "Spain", "jul_active": 18.0, "jul_new": 12.0, "jul_sess": 21.0, "jul_bounce": 0.71, "aug_active": 13.0, "aug_new": 8.0, "aug_sess": 15.0, "aug_bounce": 0.6, "active_chg": -27.8, "new_chg": -33.3, "sess_chg": -28.6}, {"Country": "Switzerland", "jul_active": 4.0, "jul_new": 0.0, "jul_sess": 10.0, "jul_bounce": 0.7, "aug_active": 12.0, "aug_new": 3.0, "aug_sess": 21.0, "aug_bounce": 0.71, "active_chg": 200.0, "new_chg": null, "sess_chg": 110.0}, {"Country": "Romania", "jul_active": 2.0, "jul_new": 0.0, "jul_sess": 2.0, "jul_bounce": 0.0, "aug_active": 12.0, "aug_new": 2.0, "aug_sess": 13.0, "aug_bounce": 0.31, "active_chg": 500.0, "new_chg": null, "sess_chg": 550.0}, {"Country": "Montenegro", "jul_active": 10.0, "jul_new": 9.0, "jul_sess": 10.0, "jul_bounce": 0.5, "aug_active": 11.0, "aug_new": 11.0, "aug_sess": 13.0, "aug_bounce": 0.54, "active_chg": 10.0, "new_chg": 22.2, "sess_chg": 30.0}, {"Country": "Sri Lanka", "jul_active": 12.0, "jul_new": 9.0, "jul_sess": 74.0, "jul_bounce": 0.51, "aug_active": 10.0, "aug_new": 4.0, "aug_sess": 100.0, "aug_bounce": 0.46, "active_chg": -16.7, "new_chg": -55.6, "sess_chg": 35.1}, {"Country": "Italy", "jul_active": 12.0, "jul_new": 2.0, "jul_sess": 27.0, "jul_bounce": 0.67, "aug_active": 10.0, "aug_new": 5.0, "aug_sess": 14.0, "aug_bounce": 0.5, "active_chg": -16.7, "new_chg": 150.0, "sess_chg": -48.1}, {"Country": "Turkmenistan", "jul_active": 17.0, "jul_new": 17.0, "jul_sess": 20.0, "jul_bounce": 0.8, "aug_active": 10.0, "aug_new": 10.0, "aug_sess": 12.0, "aug_bounce": 0.83, "active_chg": -41.2, "new_chg": -41.2, "sess_chg": -40.0}, {"Country": "Poland", "jul_active": 94.0, "jul_new": 90.0, "jul_sess": 99.0, "jul_bounce": 0.98, "aug_active": 9.0, "aug_new": 1.0, "aug_sess": 13.0, "aug_bounce": 0.46, "active_chg": -90.4, "new_chg": -98.9, "sess_chg": -86.9}, {"Country": "Guyana", "jul_active": 8.0, "jul_new": 8.0, "jul_sess": 10.0, "jul_bounce": 0.4, "aug_active": 9.0, "aug_new": 8.0, "aug_sess": 15.0, "aug_bounce": 0.4, "active_chg": 12.5, "new_chg": 0.0, "sess_chg": 50.0}, {"Country": "Macao", "jul_active": 1.0, "jul_new": 1.0, "jul_sess": 1.0, "jul_bounce": 0.0, "aug_active": 9.0, "aug_new": 8.0, "aug_sess": 10.0, "aug_bounce": 0.5, "active_chg": 800.0, "new_chg": 700.0, "sess_chg": 900.0}, {"Country": "St. Vincent & Grenadines", "jul_active": 2.0, "jul_new": 1.0, "jul_sess": 2.0, "jul_bounce": 0.0, "aug_active": 8.0, "aug_new": 6.0, "aug_sess": 19.0, "aug_bounce": 0.42, "active_chg": 300.0, "new_chg": 500.0, "sess_chg": 850.0}, {"Country": "Dominica", "jul_active": 3.0, "jul_new": 3.0, "jul_sess": 3.0, "jul_bounce": 0.0, "aug_active": 7.0, "aug_new": 7.0, "aug_sess": 9.0, "aug_bounce": 0.11, "active_chg": 133.3, "new_chg": 133.3, "sess_chg": 200.0}, {"Country": "Bermuda", "jul_active": 1.0, "jul_new": 1.0, "jul_sess": 1.0, "jul_bounce": 0.0, "aug_active": 7.0, "aug_new": 7.0, "aug_sess": 12.0, "aug_bounce": 0.42, "active_chg": 600.0, "new_chg": 600.0, "sess_chg": 1100.0}, {"Country": "Cayman Islands", "jul_active": 7.0, "jul_new": 7.0, "jul_sess": 7.0, "jul_bounce": 0.43, "aug_active": 7.0, "aug_new": 6.0, "aug_sess": 7.0, "aug_bounce": 0.71, "active_chg": 0.0, "new_chg": -14.3, "sess_chg": 0.0}, {"Country": "Guam", "jul_active": 0.0, "jul_new": 0.0, "jul_sess": 0.0, "jul_bounce": 0.0, "aug_active": 7.0, "aug_new": 7.0, "aug_sess": 11.0, "aug_bounce": 0.18, "active_chg": null, "new_chg": null, "sess_chg": null}, {"Country": "St. Lucia", "jul_active": 1.0, "jul_new": 1.0, "jul_sess": 2.0, "jul_bounce": 0.5, "aug_active": 6.0, "aug_new": 6.0, "aug_sess": 7.0, "aug_bounce": 0.43, "active_chg": 500.0, "new_chg": 500.0, "sess_chg": 250.0}, {"Country": "Isle of Man", "jul_active": 1.0, "jul_new": 1.0, "jul_sess": 1.0, "jul_bounce": 1.0, "aug_active": 6.0, "aug_new": 6.0, "aug_sess": 6.0, "aug_bounce": 0.33, "active_chg": 500.0, "new_chg": 500.0, "sess_chg": 500.0}, {"Country": "Caribbean Netherlands", "jul_active": 0.0, "jul_new": 0.0, "jul_sess": 0.0, "jul_bounce": 0.0, "aug_active": 6.0, "aug_new": 6.0, "aug_sess": 36.0, "aug_bounce": 0.31, "active_chg": null, "new_chg": null, "sess_chg": null}, {"Country": "Cura\u00e7ao", "jul_active": 2.0, "jul_new": 2.0, "jul_sess": 2.0, "jul_bounce": 0.5, "aug_active": 6.0, "aug_new": 5.0, "aug_sess": 6.0, "aug_bounce": 0.5, "active_chg": 200.0, "new_chg": 150.0, "sess_chg": 200.0}, {"Country": "Gabon", "jul_active": 7.0, "jul_new": 4.0, "jul_sess": 9.0, "jul_bounce": 0.44, "aug_active": 6.0, "aug_new": 5.0, "aug_sess": 8.0, "aug_bounce": 0.25, "active_chg": -14.3, "new_chg": 25.0, "sess_chg": -11.1}, {"Country": "Equatorial Guinea", "jul_active": 1.0, "jul_new": 1.0, "jul_sess": 2.0, "jul_bounce": 0.0, "aug_active": 5.0, "aug_new": 5.0, "aug_sess": 6.0, "aug_bounce": 0.83, "active_chg": 400.0, "new_chg": 400.0, "sess_chg": 200.0}, {"Country": "St. Kitts & Nevis", "jul_active": 6.0, "jul_new": 5.0, "jul_sess": 19.0, "jul_bounce": 0.74, "aug_active": 4.0, "aug_new": 3.0, "aug_sess": 13.0, "aug_bounce": 0.62, "active_chg": -33.3, "new_chg": -40.0, "sess_chg": -31.6}, {"Country": "Turks & Caicos Islands", "jul_active": 4.0, "jul_new": 4.0, "jul_sess": 11.0, "jul_bounce": 0.45, "aug_active": 4.0, "aug_new": 4.0, "aug_sess": 10.0, "aug_bounce": 0.4, "active_chg": 0.0, "new_chg": 0.0, "sess_chg": -9.1}, {"Country": "Czechia", "jul_active": 3.0, "jul_new": 0.0, "jul_sess": 4.0, "jul_bounce": 0.25, "aug_active": 4.0, "aug_new": 0.0, "aug_sess": 8.0, "aug_bounce": 0.75, "active_chg": 33.3, "new_chg": null, "sess_chg": 100.0}, {"Country": "Andorra", "jul_active": 1.0, "jul_new": 1.0, "jul_sess": 1.0, "jul_bounce": 1.0, "aug_active": 4.0, "aug_new": 4.0, "aug_sess": 4.0, "aug_bounce": 0.75, "active_chg": 300.0, "new_chg": 300.0, "sess_chg": 300.0}, {"Country": "Sweden", "jul_active": 15.0, "jul_new": 13.0, "jul_sess": 17.0, "jul_bounce": 0.94, "aug_active": 4.0, "aug_new": 1.0, "aug_sess": 4.0, "aug_bounce": 0.75, "active_chg": -73.3, "new_chg": -92.3, "sess_chg": -76.5}, {"Country": "Aruba", "jul_active": 4.0, "jul_new": 4.0, "jul_sess": 5.0, "jul_bounce": 0.8, "aug_active": 3.0, "aug_new": 3.0, "aug_sess": 7.0, "aug_bounce": 0.43, "active_chg": -25.0, "new_chg": -25.0, "sess_chg": 40.0}, {"Country": "Greece", "jul_active": 0.0, "jul_new": 0.0, "jul_sess": 0.0, "jul_bounce": 0.0, "aug_active": 3.0, "aug_new": 2.0, "aug_sess": 3.0, "aug_bounce": 1.0, "active_chg": null, "new_chg": null, "sess_chg": null}, {"Country": "Denmark", "jul_active": 1.0, "jul_new": 1.0, "jul_sess": 1.0, "jul_bounce": 1.0, "aug_active": 3.0, "aug_new": 2.0, "aug_sess": 3.0, "aug_bounce": 0.33, "active_chg": 200.0, "new_chg": 100.0, "sess_chg": 200.0}, {"Country": "Austria", "jul_active": 3.0, "jul_new": 1.0, "jul_sess": 4.0, "jul_bounce": 0.5, "aug_active": 3.0, "aug_new": 2.0, "aug_sess": 4.0, "aug_bounce": 0.75, "active_chg": 0.0, "new_chg": 100.0, "sess_chg": 0.0}, {"Country": "Comoros", "jul_active": 3.0, "jul_new": 2.0, "jul_sess": 7.0, "jul_bounce": 0.14, "aug_active": 2.0, "aug_new": 2.0, "aug_sess": 2.0, "aug_bounce": 0.5, "active_chg": -33.3, "new_chg": 0.0, "sess_chg": -71.4}, {"Country": "Cook Islands", "jul_active": 0.0, "jul_new": 0.0, "jul_sess": 0.0, "jul_bounce": 0.0, "aug_active": 2.0, "aug_new": 2.0, "aug_sess": 2.0, "aug_bounce": 0.5, "active_chg": null, "new_chg": null, "sess_chg": null}, {"Country": "Timor-Leste", "jul_active": 0.0, "jul_new": 0.0, "jul_sess": 0.0, "jul_bounce": 0.0, "aug_active": 2.0, "aug_new": 2.0, "aug_sess": 5.0, "aug_bounce": 0.4, "active_chg": null, "new_chg": null, "sess_chg": null}, {"Country": "Cape Verde", "jul_active": 4.0, "jul_new": 4.0, "jul_sess": 4.0, "jul_bounce": 0.75, "aug_active": 2.0, "aug_new": 2.0, "aug_sess": 2.0, "aug_bounce": 0.0, "active_chg": -50.0, "new_chg": -50.0, "sess_chg": -50.0}, {"Country": "Kiribati", "jul_active": 0.0, "jul_new": 0.0, "jul_sess": 0.0, "jul_bounce": 0.0, "aug_active": 2.0, "aug_new": 2.0, "aug_sess": 2.0, "aug_bounce": 1.0, "active_chg": null, "new_chg": null, "sess_chg": null}, {"Country": "Finland", "jul_active": 3.0, "jul_new": 0.0, "jul_sess": 5.0, "jul_bounce": 0.6, "aug_active": 2.0, "aug_new": 0.0, "aug_sess": 2.0, "aug_bounce": 0.5, "active_chg": -33.3, "new_chg": null, "sess_chg": -60.0}, {"Country": "Monaco", "jul_active": 1.0, "jul_new": 1.0, "jul_sess": 2.0, "jul_bounce": 0.0, "aug_active": 2.0, "aug_new": 2.0, "aug_sess": 2.0, "aug_bounce": 0.5, "active_chg": 100.0, "new_chg": 100.0, "sess_chg": 0.0}, {"Country": "Norway", "jul_active": 1.0, "jul_new": 0.0, "jul_sess": 1.0, "jul_bounce": 0.0, "aug_active": 2.0, "aug_new": 1.0, "aug_sess": 3.0, "aug_bounce": 0.33, "active_chg": 100.0, "new_chg": null, "sess_chg": 200.0}, {"Country": "Bulgaria", "jul_active": 0.0, "jul_new": 0.0, "jul_sess": 0.0, "jul_bounce": 0.0, "aug_active": 1.0, "aug_new": 0.0, "aug_sess": 1.0, "aug_bounce": 0.0, "active_chg": null, "new_chg": null, "sess_chg": null}, {"Country": "Cyprus", "jul_active": 1.0, "jul_new": 0.0, "jul_sess": 1.0, "jul_bounce": 1.0, "aug_active": 1.0, "aug_new": 0.0, "aug_sess": 1.0, "aug_bounce": 0.0, "active_chg": 0.0, "new_chg": null, "sess_chg": 0.0}, {"Country": "Croatia", "jul_active": 0.0, "jul_new": 0.0, "jul_sess": 0.0, "jul_bounce": 0.0, "aug_active": 1.0, "aug_new": 0.0, "aug_sess": 1.0, "aug_bounce": 0.0, "active_chg": null, "new_chg": null, "sess_chg": null}, {"Country": "Tuvalu", "jul_active": 0.0, "jul_new": 0.0, "jul_sess": 0.0, "jul_bounce": 0.0, "aug_active": 1.0, "aug_new": 1.0, "aug_sess": 1.0, "aug_bounce": 1.0, "active_chg": null, "new_chg": null, "sess_chg": null}, {"Country": "Western Sahara", "jul_active": 13.0, "jul_new": 10.0, "jul_sess": 17.0, "jul_bounce": 0.82, "aug_active": 1.0, "aug_new": 1.0, "aug_sess": 2.0, "aug_bounce": 1.0, "active_chg": -92.3, "new_chg": -90.0, "sess_chg": -88.2}, {"Country": "Ukraine", "jul_active": 1.0, "jul_new": 1.0, "jul_sess": 14.0, "jul_bounce": 1.0, "aug_active": 1.0, "aug_new": 0.0, "aug_sess": 14.0, "aug_bounce": 0.93, "active_chg": 0.0, "new_chg": -100.0, "sess_chg": 0.0}, {"Country": "Slovakia", "jul_active": 0.0, "jul_new": 0.0, "jul_sess": 0.0, "jul_bounce": 0.0, "aug_active": 1.0, "aug_new": 0.0, "aug_sess": 1.0, "aug_bounce": 0.0, "active_chg": null, "new_chg": null, "sess_chg": null}, {"Country": "Iran", "jul_active": 1.0, "jul_new": 0.0, "jul_sess": 1.0, "jul_bounce": 0.0, "aug_active": 1.0, "aug_new": 1.0, "aug_sess": 1.0, "aug_bounce": 0.0, "active_chg": 0.0, "new_chg": null, "sess_chg": 0.0}, {"Country": "Samoa", "jul_active": 1.0, "jul_new": 1.0, "jul_sess": 1.0, "jul_bounce": 1.0, "aug_active": 1.0, "aug_new": 0.0, "aug_sess": 1.0, "aug_bounce": 1.0, "active_chg": 0.0, "new_chg": -100.0, "sess_chg": 0.0}, {"Country": "Lithuania", "jul_active": 4.0, "jul_new": 3.0, "jul_sess": 4.0, "jul_bounce": 0.75, "aug_active": 1.0, "aug_new": 0.0, "aug_sess": 1.0, "aug_bounce": 0.0, "active_chg": -75.0, "new_chg": -100.0, "sess_chg": -75.0}, {"Country": "Latvia", "jul_active": 1.0, "jul_new": 0.0, "jul_sess": 1.0, "jul_bounce": 1.0, "aug_active": 1.0, "aug_new": 0.0, "aug_sess": 1.0, "aug_bounce": 1.0, "active_chg": 0.0, "new_chg": null, "sess_chg": 0.0}, {"Country": "Iceland", "jul_active": 0.0, "jul_new": 0.0, "jul_sess": 1.0, "jul_bounce": 1.0, "aug_active": 1.0, "aug_new": 0.0, "aug_sess": 1.0, "aug_bounce": 0.0, "active_chg": null, "new_chg": null, "sess_chg": 0.0}, {"Country": "Portugal", "jul_active": 1.0, "jul_new": 1.0, "jul_sess": 2.0, "jul_bounce": 0.5, "aug_active": 1.0, "aug_new": 1.0, "aug_sess": 1.0, "aug_bounce": 1.0, "active_chg": 0.0, "new_chg": 0.0, "sess_chg": -50.0}, {"Country": "Slovenia", "jul_active": 0.0, "jul_new": 0.0, "jul_sess": 0.0, "jul_bounce": 0.0, "aug_active": 1.0, "aug_new": 1.0, "aug_sess": 1.0, "aug_bounce": 1.0, "active_chg": null, "new_chg": null, "sess_chg": null}, {"Country": "Solomon Islands", "jul_active": 0.0, "jul_new": 0.0, "jul_sess": 0.0, "jul_bounce": 0.0, "aug_active": 1.0, "aug_new": 1.0, "aug_sess": 1.0, "aug_bounce": 0.0, "active_chg": null, "new_chg": null, "sess_chg": null}, {"Country": "Belize", "jul_active": 3.0, "jul_new": 3.0, "jul_sess": 3.0, "jul_bounce": 0.33, "aug_active": 0.0, "aug_new": 0.0, "aug_sess": 0.0, "aug_bounce": 0.0, "active_chg": -100.0, "new_chg": -100.0, "sess_chg": -100.0}, {"Country": "Congo - Brazzaville", "jul_active": 1.0, "jul_new": 1.0, "jul_sess": 1.0, "jul_bounce": 0.0, "aug_active": 0.0, "aug_new": 0.0, "aug_sess": 0.0, "aug_bounce": 0.0, "active_chg": -100.0, "new_chg": -100.0, "sess_chg": -100.0}, {"Country": "British Virgin Islands", "jul_active": 2.0, "jul_new": 2.0, "jul_sess": 2.0, "jul_bounce": 0.5, "aug_active": 0.0, "aug_new": 0.0, "aug_sess": 0.0, "aug_bounce": 0.0, "active_chg": -100.0, "new_chg": -100.0, "sess_chg": -100.0}, {"Country": "Antigua & Barbuda", "jul_active": 2.0, "jul_new": 2.0, "jul_sess": 2.0, "jul_bounce": 1.0, "aug_active": 0.0, "aug_new": 0.0, "aug_sess": 0.0, "aug_bounce": 0.0, "active_chg": -100.0, "new_chg": -100.0, "sess_chg": -100.0}, {"Country": "Estonia", "jul_active": 1.0, "jul_new": 1.0, "jul_sess": 2.0, "jul_bounce": 0.5, "aug_active": 0.0, "aug_new": 0.0, "aug_sess": 0.0, "aug_bounce": 0.0, "active_chg": -100.0, "new_chg": -100.0, "sess_chg": -100.0}, {"Country": "Nauru", "jul_active": 2.0, "jul_new": 2.0, "jul_sess": 2.0, "jul_bounce": 0.5, "aug_active": 0.0, "aug_new": 0.0, "aug_sess": 0.0, "aug_bounce": 0.0, "active_chg": -100.0, "new_chg": -100.0, "sess_chg": -100.0}, {"Country": "Falkland Islands (Islas Malvinas)", "jul_active": 1.0, "jul_new": 1.0, "jul_sess": 1.0, "jul_bounce": 0.0, "aug_active": 0.0, "aug_new": 0.0, "aug_sess": 0.0, "aug_bounce": 0.0, "active_chg": -100.0, "new_chg": -100.0, "sess_chg": -100.0}, {"Country": "Grenada", "jul_active": 1.0, "jul_new": 1.0, "jul_sess": 1.0, "jul_bounce": 1.0, "aug_active": 0.0, "aug_new": 0.0, "aug_sess": 0.0, "aug_bounce": 0.0, "active_chg": -100.0, "new_chg": -100.0, "sess_chg": -100.0}, {"Country": "Ireland", "jul_active": 2.0, "jul_new": 1.0, "jul_sess": 3.0, "jul_bounce": 0.33, "aug_active": 0.0, "aug_new": 0.0, "aug_sess": 1.0, "aug_bounce": 0.0, "active_chg": -100.0, "new_chg": -100.0, "sess_chg": -66.7}, {"Country": "Sint Maarten", "jul_active": 1.0, "jul_new": 1.0, "jul_sess": 1.0, "jul_bounce": 1.0, "aug_active": 0.0, "aug_new": 0.0, "aug_sess": 0.0, "aug_bounce": 0.0, "active_chg": -100.0, "new_chg": -100.0, "sess_chg": -100.0}, {"Country": "Palau", "jul_active": 2.0, "jul_new": 2.0, "jul_sess": 2.0, "jul_bounce": 0.0, "aug_active": 0.0, "aug_new": 0.0, "aug_sess": 0.0, "aug_bounce": 0.0, "active_chg": -100.0, "new_chg": -100.0, "sess_chg": -100.0}, {"Country": "Tonga", "jul_active": 1.0, "jul_new": 1.0, "jul_sess": 1.0, "jul_bounce": 0.0, "aug_active": 0.0, "aug_new": 0.0, "aug_sess": 0.0, "aug_bounce": 0.0, "active_chg": -100.0, "new_chg": -100.0, "sess_chg": -100.0}, {"Country": "U.S. Virgin Islands", "jul_active": 1.0, "jul_new": 1.0, "jul_sess": 1.0, "jul_bounce": 1.0, "aug_active": 0.0, "aug_new": 0.0, "aug_sess": 0.0, "aug_bounce": 0.0, "active_chg": -100.0, "new_chg": -100.0, "sess_chg": -100.0}];
+const COM_DATA      = [{"Country": "India", "jul_active": 90.0, "jul_new": 68.0, "jul_eng": 253.0, "aug_active": 92447.0, "aug_new": 92997.0, "aug_eng": 116282.0, "active_chg": 102618.9, "new_chg": 136660.3, "eng_chg": 45861.3}, {"Country": "Nigeria", "jul_active": 1315.0, "jul_new": 1166.0, "jul_eng": 4112.0, "aug_active": 41695.0, "aug_new": 41020.0, "aug_eng": 73179.0, "active_chg": 3070.7, "new_chg": 3418.0, "eng_chg": 1679.6}, {"Country": "Pakistan", "jul_active": 709.0, "jul_new": 566.0, "jul_eng": 2618.0, "aug_active": 31885.0, "aug_new": 31297.0, "aug_eng": 45570.0, "active_chg": 4397.2, "new_chg": 5429.5, "eng_chg": 1640.6}, {"Country": "Kenya", "jul_active": 85.0, "jul_new": 73.0, "jul_eng": 150.0, "aug_active": 3054.0, "aug_new": 3013.0, "aug_eng": 4180.0, "active_chg": 3492.9, "new_chg": 4027.4, "eng_chg": 2686.7}, {"Country": "Ghana", "jul_active": 92.0, "jul_new": 80.0, "jul_eng": 309.0, "aug_active": 2608.0, "aug_new": 2595.0, "aug_eng": 3970.0, "active_chg": 2734.8, "new_chg": 3143.8, "eng_chg": 1184.8}, {"Country": "South Africa", "jul_active": 19.0, "jul_new": 15.0, "jul_eng": 36.0, "aug_active": 963.0, "aug_new": 957.0, "aug_eng": 1141.0, "active_chg": 4968.4, "new_chg": 6280.0, "eng_chg": 3069.4}, {"Country": "United States", "jul_active": 96.0, "jul_new": 74.0, "jul_eng": 126.0, "aug_active": 345.0, "aug_new": 324.0, "aug_eng": 385.0, "active_chg": 259.4, "new_chg": 337.8, "eng_chg": 205.6}, {"Country": "(not set)", "jul_active": 0.0, "jul_new": 0.0, "jul_eng": 0.0, "aug_active": 185.0, "aug_new": 174.0, "aug_eng": 252.0, "active_chg": null, "new_chg": null, "eng_chg": null}, {"Country": "Indonesia", "jul_active": 73.0, "jul_new": 46.0, "jul_eng": 131.0, "aug_active": 139.0, "aug_new": 116.0, "aug_eng": 224.0, "active_chg": 90.4, "new_chg": 152.2, "eng_chg": 71.0}, {"Country": "Germany", "jul_active": 76.0, "jul_new": 36.0, "jul_eng": 199.0, "aug_active": 134.0, "aug_new": 99.0, "aug_eng": 203.0, "active_chg": 76.3, "new_chg": 175.0, "eng_chg": 2.0}, {"Country": "Iraq", "jul_active": 150.0, "jul_new": 142.0, "jul_eng": 204.0, "aug_active": 128.0, "aug_new": 124.0, "aug_eng": 175.0, "active_chg": -14.7, "new_chg": -12.7, "eng_chg": -14.2}, {"Country": "Ethiopia", "jul_active": 33.0, "jul_new": 31.0, "jul_eng": 41.0, "aug_active": 126.0, "aug_new": 122.0, "aug_eng": 132.0, "active_chg": 281.8, "new_chg": 293.5, "eng_chg": 222.0}, {"Country": "Nepal", "jul_active": 3.0, "jul_new": 2.0, "jul_eng": 3.0, "aug_active": 112.0, "aug_new": 112.0, "aug_eng": 140.0, "active_chg": 3633.3, "new_chg": 5500.0, "eng_chg": 4566.7}, {"Country": "Bangladesh", "jul_active": 92.0, "jul_new": 44.0, "jul_eng": 2092.0, "aug_active": 107.0, "aug_new": 50.0, "aug_eng": 2140.0, "active_chg": 16.3, "new_chg": 13.6, "eng_chg": 2.3}, {"Country": "United Arab Emirates", "jul_active": 71.0, "jul_new": 42.0, "jul_eng": 186.0, "aug_active": 101.0, "aug_new": 73.0, "aug_eng": 243.0, "active_chg": 42.3, "new_chg": 73.8, "eng_chg": 30.6}, {"Country": "Netherlands", "jul_active": 36.0, "jul_new": 18.0, "jul_eng": 93.0, "aug_active": 76.0, "aug_new": 52.0, "aug_eng": 116.0, "active_chg": 111.1, "new_chg": 188.9, "eng_chg": 24.7}, {"Country": "Saudi Arabia", "jul_active": 5.0, "jul_new": 4.0, "jul_eng": 6.0, "aug_active": 71.0, "aug_new": 66.0, "aug_eng": 102.0, "active_chg": 1320.0, "new_chg": 1550.0, "eng_chg": 1600.0}, {"Country": "Iran", "jul_active": 92.0, "jul_new": 58.0, "jul_eng": 259.0, "aug_active": 68.0, "aug_new": 37.0, "aug_eng": 205.0, "active_chg": -26.1, "new_chg": -36.2, "eng_chg": -20.8}, {"Country": "United Kingdom", "jul_active": 172.0, "jul_new": 136.0, "jul_eng": 504.0, "aug_active": 67.0, "aug_new": 37.0, "aug_eng": 191.0, "active_chg": -61.0, "new_chg": -72.8, "eng_chg": -62.1}, {"Country": "Benin", "jul_active": 4.0, "jul_new": 2.0, "jul_eng": 3.0, "aug_active": 57.0, "aug_new": 54.0, "aug_eng": 84.0, "active_chg": 1325.0, "new_chg": 2600.0, "eng_chg": 2700.0}, {"Country": "Singapore", "jul_active": 46.0, "jul_new": 25.0, "jul_eng": 107.0, "aug_active": 55.0, "aug_new": 45.0, "aug_eng": 70.0, "active_chg": 19.6, "new_chg": 80.0, "eng_chg": -34.6}, {"Country": "Cameroon", "jul_active": 30.0, "jul_new": 25.0, "jul_eng": 90.0, "aug_active": 54.0, "aug_new": 46.0, "aug_eng": 94.0, "active_chg": 80.0, "new_chg": 84.0, "eng_chg": 4.4}, {"Country": "France", "jul_active": 18.0, "jul_new": 6.0, "jul_eng": 33.0, "aug_active": 46.0, "aug_new": 26.0, "aug_eng": 63.0, "active_chg": 155.6, "new_chg": 333.3, "eng_chg": 90.9}, {"Country": "C\u00f4te d\u2019Ivoire", "jul_active": 9.0, "jul_new": 4.0, "jul_eng": 21.0, "aug_active": 39.0, "aug_new": 38.0, "aug_eng": 89.0, "active_chg": 333.3, "new_chg": 850.0, "eng_chg": 323.8}, {"Country": "Niger", "jul_active": 0.0, "jul_new": 0.0, "jul_eng": 0.0, "aug_active": 38.0, "aug_new": 38.0, "aug_eng": 53.0, "active_chg": null, "new_chg": null, "eng_chg": null}, {"Country": "Spain", "jul_active": 16.0, "jul_new": 9.0, "jul_eng": 28.0, "aug_active": 38.0, "aug_new": 32.0, "aug_eng": 63.0, "active_chg": 137.5, "new_chg": 255.6, "eng_chg": 125.0}, {"Country": "Togo", "jul_active": 2.0, "jul_new": 2.0, "jul_eng": 2.0, "aug_active": 33.0, "aug_new": 33.0, "aug_eng": 47.0, "active_chg": 1550.0, "new_chg": 1550.0, "eng_chg": 2250.0}, {"Country": "Hungary", "jul_active": 2.0, "jul_new": 2.0, "jul_eng": 3.0, "aug_active": 27.0, "aug_new": 26.0, "aug_eng": 33.0, "active_chg": 1250.0, "new_chg": 1200.0, "eng_chg": 1000.0}, {"Country": "Brazil", "jul_active": 18.0, "jul_new": 12.0, "jul_eng": 44.0, "aug_active": 25.0, "aug_new": 20.0, "aug_eng": 44.0, "active_chg": 38.9, "new_chg": 66.7, "eng_chg": 0.0}, {"Country": "Australia", "jul_active": 36.0, "jul_new": 23.0, "jul_eng": 131.0, "aug_active": 24.0, "aug_new": 20.0, "aug_eng": 120.0, "active_chg": -33.3, "new_chg": -13.0, "eng_chg": -8.4}, {"Country": "Oman", "jul_active": 1.0, "jul_new": 1.0, "jul_eng": 1.0, "aug_active": 23.0, "aug_new": 23.0, "aug_eng": 28.0, "active_chg": 2200.0, "new_chg": 2200.0, "eng_chg": 2700.0}, {"Country": "Egypt", "jul_active": 0.0, "jul_new": 0.0, "jul_eng": 0.0, "aug_active": 23.0, "aug_new": 23.0, "aug_eng": 44.0, "active_chg": null, "new_chg": null, "eng_chg": null}, {"Country": "Malaysia", "jul_active": 2.0, "jul_new": 1.0, "jul_eng": 4.0, "aug_active": 22.0, "aug_new": 11.0, "aug_eng": 86.0, "active_chg": 1000.0, "new_chg": 1000.0, "eng_chg": 2050.0}, {"Country": "Denmark", "jul_active": 2.0, "jul_new": 2.0, "jul_eng": 2.0, "aug_active": 21.0, "aug_new": 20.0, "aug_eng": 46.0, "active_chg": 950.0, "new_chg": 900.0, "eng_chg": 2200.0}, {"Country": "Canada", "jul_active": 8.0, "jul_new": 7.0, "jul_eng": 10.0, "aug_active": 20.0, "aug_new": 18.0, "aug_eng": 36.0, "active_chg": 150.0, "new_chg": 157.1, "eng_chg": 260.0}, {"Country": "China", "jul_active": 10.0, "jul_new": 7.0, "jul_eng": 12.0, "aug_active": 19.0, "aug_new": 19.0, "aug_eng": 19.0, "active_chg": 90.0, "new_chg": 171.4, "eng_chg": 58.3}, {"Country": "Japan", "jul_active": 15.0, "jul_new": 11.0, "jul_eng": 46.0, "aug_active": 18.0, "aug_new": 14.0, "aug_eng": 30.0, "active_chg": 20.0, "new_chg": 27.3, "eng_chg": -34.8}, {"Country": "Morocco", "jul_active": 6.0, "jul_new": 3.0, "jul_eng": 10.0, "aug_active": 14.0, "aug_new": 9.0, "aug_eng": 18.0, "active_chg": 133.3, "new_chg": 200.0, "eng_chg": 80.0}, {"Country": "T\u00fcrkiye", "jul_active": 17.0, "jul_new": 13.0, "jul_eng": 41.0, "aug_active": 13.0, "aug_new": 8.0, "aug_eng": 13.0, "active_chg": -23.5, "new_chg": -38.5, "eng_chg": -68.3}, {"Country": "Burkina Faso", "jul_active": 0.0, "jul_new": 0.0, "jul_eng": 0.0, "aug_active": 13.0, "aug_new": 13.0, "aug_eng": 17.0, "active_chg": null, "new_chg": null, "eng_chg": null}, {"Country": "Italy", "jul_active": 25.0, "jul_new": 19.0, "jul_eng": 52.0, "aug_active": 13.0, "aug_new": 6.0, "aug_eng": 24.0, "active_chg": -48.0, "new_chg": -68.4, "eng_chg": -53.8}, {"Country": "Slovakia", "jul_active": 0.0, "jul_new": 0.0, "jul_eng": 0.0, "aug_active": 12.0, "aug_new": 12.0, "aug_eng": 12.0, "active_chg": null, "new_chg": null, "eng_chg": null}, {"Country": "Sweden", "jul_active": 10.0, "jul_new": 7.0, "jul_eng": 63.0, "aug_active": 11.0, "aug_new": 9.0, "aug_eng": 40.0, "active_chg": 10.0, "new_chg": 28.6, "eng_chg": -36.5}, {"Country": "Afghanistan", "jul_active": 10.0, "jul_new": 6.0, "jul_eng": 43.0, "aug_active": 11.0, "aug_new": 9.0, "aug_eng": 22.0, "active_chg": 10.0, "new_chg": 50.0, "eng_chg": -48.8}, {"Country": "Chad", "jul_active": 0.0, "jul_new": 0.0, "jul_eng": 0.0, "aug_active": 11.0, "aug_new": 11.0, "aug_eng": 24.0, "active_chg": null, "new_chg": null, "eng_chg": null}, {"Country": "Uganda", "jul_active": 16.0, "jul_new": 11.0, "jul_eng": 65.0, "aug_active": 10.0, "aug_new": 7.0, "aug_eng": 25.0, "active_chg": -37.5, "new_chg": -36.4, "eng_chg": -61.5}, {"Country": "Rwanda", "jul_active": 2.0, "jul_new": 1.0, "jul_eng": 7.0, "aug_active": 9.0, "aug_new": 8.0, "aug_eng": 11.0, "active_chg": 350.0, "new_chg": 700.0, "eng_chg": 57.1}, {"Country": "Philippines", "jul_active": 5.0, "jul_new": 6.0, "jul_eng": 21.0, "aug_active": 9.0, "aug_new": 8.0, "aug_eng": 9.0, "active_chg": 80.0, "new_chg": 33.3, "eng_chg": -57.1}, {"Country": "Kuwait", "jul_active": 8.0, "jul_new": 6.0, "jul_eng": 21.0, "aug_active": 9.0, "aug_new": 8.0, "aug_eng": 30.0, "active_chg": 12.5, "new_chg": 33.3, "eng_chg": 42.9}, {"Country": "Finland", "jul_active": 10.0, "jul_new": 7.0, "jul_eng": 18.0, "aug_active": 9.0, "aug_new": 6.0, "aug_eng": 9.0, "active_chg": -10.0, "new_chg": -14.3, "eng_chg": -50.0}, {"Country": "Senegal", "jul_active": 3.0, "jul_new": 2.0, "jul_eng": 6.0, "aug_active": 9.0, "aug_new": 9.0, "aug_eng": 9.0, "active_chg": 200.0, "new_chg": 350.0, "eng_chg": 50.0}, {"Country": "Dominican Republic", "jul_active": 8.0, "jul_new": 6.0, "jul_eng": 18.0, "aug_active": 8.0, "aug_new": 4.0, "aug_eng": 15.0, "active_chg": 0.0, "new_chg": -33.3, "eng_chg": -16.7}, {"Country": "Qatar", "jul_active": 2.0, "jul_new": 1.0, "jul_eng": 3.0, "aug_active": 7.0, "aug_new": 7.0, "aug_eng": 25.0, "active_chg": 250.0, "new_chg": 600.0, "eng_chg": 733.3}, {"Country": "Malawi", "jul_active": 3.0, "jul_new": 2.0, "jul_eng": 8.0, "aug_active": 7.0, "aug_new": 7.0, "aug_eng": 7.0, "active_chg": 133.3, "new_chg": 250.0, "eng_chg": -12.5}, {"Country": "Hong Kong", "jul_active": 8.0, "jul_new": 4.0, "jul_eng": 9.0, "aug_active": 7.0, "aug_new": 4.0, "aug_eng": 9.0, "active_chg": -12.5, "new_chg": 0.0, "eng_chg": 0.0}, {"Country": "Poland", "jul_active": 8.0, "jul_new": 7.0, "jul_eng": 46.0, "aug_active": 7.0, "aug_new": 4.0, "aug_eng": 11.0, "active_chg": -12.5, "new_chg": -42.9, "eng_chg": -76.1}, {"Country": "Mozambique", "jul_active": 3.0, "jul_new": 1.0, "jul_eng": 7.0, "aug_active": 7.0, "aug_new": 7.0, "aug_eng": 9.0, "active_chg": 133.3, "new_chg": 600.0, "eng_chg": 28.6}, {"Country": "Lebanon", "jul_active": 6.0, "jul_new": 6.0, "jul_eng": 10.0, "aug_active": 7.0, "aug_new": 6.0, "aug_eng": 21.0, "active_chg": 16.7, "new_chg": 0.0, "eng_chg": 110.0}, {"Country": "Bahrain", "jul_active": 3.0, "jul_new": 1.0, "jul_eng": 10.0, "aug_active": 6.0, "aug_new": 3.0, "aug_eng": 24.0, "active_chg": 100.0, "new_chg": 200.0, "eng_chg": 140.0}, {"Country": "Algeria", "jul_active": 7.0, "jul_new": 5.0, "jul_eng": 8.0, "aug_active": 6.0, "aug_new": 5.0, "aug_eng": 12.0, "active_chg": -14.3, "new_chg": 0.0, "eng_chg": 50.0}, {"Country": "Cambodia", "jul_active": 4.0, "jul_new": 1.0, "jul_eng": 56.0, "aug_active": 6.0, "aug_new": 4.0, "aug_eng": 51.0, "active_chg": 50.0, "new_chg": 300.0, "eng_chg": -8.9}, {"Country": "Switzerland", "jul_active": 9.0, "jul_new": 3.0, "jul_eng": 38.0, "aug_active": 6.0, "aug_new": 3.0, "aug_eng": 12.0, "active_chg": -33.3, "new_chg": 0.0, "eng_chg": -68.4}, {"Country": "Russia", "jul_active": 3.0, "jul_new": 2.0, "jul_eng": 4.0, "aug_active": 6.0, "aug_new": 1.0, "aug_eng": 9.0, "active_chg": 100.0, "new_chg": -50.0, "eng_chg": 125.0}, {"Country": "Mexico", "jul_active": 5.0, "jul_new": 2.0, "jul_eng": 5.0, "aug_active": 6.0, "aug_new": 5.0, "aug_eng": 9.0, "active_chg": 20.0, "new_chg": 150.0, "eng_chg": 80.0}, {"Country": "New Zealand", "jul_active": 1.0, "jul_new": 1.0, "jul_eng": 1.0, "aug_active": 6.0, "aug_new": 4.0, "aug_eng": 8.0, "active_chg": 500.0, "new_chg": 300.0, "eng_chg": 700.0}, {"Country": "Martinique", "jul_active": 3.0, "jul_new": 2.0, "jul_eng": 3.0, "aug_active": 6.0, "aug_new": 4.0, "aug_eng": 8.0, "active_chg": 100.0, "new_chg": 100.0, "eng_chg": 166.7}, {"Country": "Zimbabwe", "jul_active": 6.0, "jul_new": 5.0, "jul_eng": 24.0, "aug_active": 6.0, "aug_new": 4.0, "aug_eng": 29.0, "active_chg": 0.0, "new_chg": -20.0, "eng_chg": 20.8}, {"Country": "Thailand", "jul_active": 10.0, "jul_new": 6.0, "jul_eng": 59.0, "aug_active": 5.0, "aug_new": 4.0, "aug_eng": 10.0, "active_chg": -50.0, "new_chg": -33.3, "eng_chg": -83.1}, {"Country": "Portugal", "jul_active": 3.0, "jul_new": 3.0, "jul_eng": 8.0, "aug_active": 5.0, "aug_new": 2.0, "aug_eng": 12.0, "active_chg": 66.7, "new_chg": -33.3, "eng_chg": 50.0}, {"Country": "Gambia", "jul_active": 0.0, "jul_new": 0.0, "jul_eng": 0.0, "aug_active": 5.0, "aug_new": 5.0, "aug_eng": 6.0, "active_chg": null, "new_chg": null, "eng_chg": null}, {"Country": "Cuba", "jul_active": 3.0, "jul_new": 0.0, "jul_eng": 11.0, "aug_active": 5.0, "aug_new": 1.0, "aug_eng": 25.0, "active_chg": 66.7, "new_chg": null, "eng_chg": 127.3}, {"Country": "Congo - Kinshasa", "jul_active": 2.0, "jul_new": 0.0, "jul_eng": 4.0, "aug_active": 5.0, "aug_new": 4.0, "aug_eng": 8.0, "active_chg": 150.0, "new_chg": null, "eng_chg": 100.0}, {"Country": "Somalia", "jul_active": 31.0, "jul_new": 24.0, "jul_eng": 40.0, "aug_active": 5.0, "aug_new": 3.0, "aug_eng": 16.0, "active_chg": -83.9, "new_chg": -87.5, "eng_chg": -60.0}, {"Country": "Uzbekistan", "jul_active": 12.0, "jul_new": 11.0, "jul_eng": 16.0, "aug_active": 5.0, "aug_new": 4.0, "aug_eng": 12.0, "active_chg": -58.3, "new_chg": -63.6, "eng_chg": -25.0}, {"Country": "Angola", "jul_active": 1.0, "jul_new": 0.0, "jul_eng": 2.0, "aug_active": 4.0, "aug_new": 3.0, "aug_eng": 9.0, "active_chg": 300.0, "new_chg": null, "eng_chg": 350.0}, {"Country": 0, "jul_active": 0.0, "jul_new": 0.0, "jul_eng": 0.0, "aug_active": 4.0, "aug_new": 4.0, "aug_eng": 6.0, "active_chg": null, "new_chg": null, "eng_chg": null}, {"Country": "Serbia", "jul_active": 1.0, "jul_new": 0.0, "jul_eng": 6.0, "aug_active": 4.0, "aug_new": 3.0, "aug_eng": 6.0, "active_chg": 300.0, "new_chg": null, "eng_chg": 0.0}, {"Country": "Ukraine", "jul_active": 3.0, "jul_new": 1.0, "jul_eng": 8.0, "aug_active": 4.0, "aug_new": 3.0, "aug_eng": 9.0, "active_chg": 33.3, "new_chg": 200.0, "eng_chg": 12.5}, {"Country": "Liberia", "jul_active": 2.0, "jul_new": 0.0, "jul_eng": 4.0, "aug_active": 4.0, "aug_new": 3.0, "aug_eng": 5.0, "active_chg": 100.0, "new_chg": null, "eng_chg": 25.0}, {"Country": "Kazakhstan", "jul_active": 1.0, "jul_new": 1.0, "jul_eng": 3.0, "aug_active": 4.0, "aug_new": 4.0, "aug_eng": 4.0, "active_chg": 300.0, "new_chg": 300.0, "eng_chg": 33.3}, {"Country": "Ireland", "jul_active": 8.0, "jul_new": 6.0, "jul_eng": 27.0, "aug_active": 4.0, "aug_new": 3.0, "aug_eng": 19.0, "active_chg": -50.0, "new_chg": -50.0, "eng_chg": -29.6}, {"Country": "Cyprus", "jul_active": 3.0, "jul_new": 2.0, "jul_eng": 25.0, "aug_active": 4.0, "aug_new": 0.0, "aug_eng": 10.0, "active_chg": 33.3, "new_chg": -100.0, "eng_chg": -60.0}, {"Country": "Israel", "jul_active": 7.0, "jul_new": 2.0, "jul_eng": 17.0, "aug_active": 3.0, "aug_new": 2.0, "aug_eng": 20.0, "active_chg": -57.1, "new_chg": 0.0, "eng_chg": 17.6}, {"Country": "Palestine", "jul_active": 3.0, "jul_new": 0.0, "jul_eng": 25.0, "aug_active": 3.0, "aug_new": 1.0, "aug_eng": 2.0, "active_chg": 0.0, "new_chg": null, "eng_chg": -92.0}, {"Country": "Sri Lanka", "jul_active": 4.0, "jul_new": 1.0, "jul_eng": 40.0, "aug_active": 3.0, "aug_new": 1.0, "aug_eng": 27.0, "active_chg": -25.0, "new_chg": 0.0, "eng_chg": -32.5}, {"Country": "Myanmar (Burma)", "jul_active": 0.0, "jul_new": 0.0, "jul_eng": 0.0, "aug_active": 3.0, "aug_new": 2.0, "aug_eng": 4.0, "active_chg": null, "new_chg": null, "eng_chg": null}, {"Country": "Austria", "jul_active": 2.0, "jul_new": 1.0, "jul_eng": 14.0, "aug_active": 3.0, "aug_new": 1.0, "aug_eng": 18.0, "active_chg": 50.0, "new_chg": 0.0, "eng_chg": 28.6}, {"Country": "Albania", "jul_active": 0.0, "jul_new": 0.0, "jul_eng": 0.0, "aug_active": 3.0, "aug_new": 2.0, "aug_eng": 3.0, "active_chg": null, "new_chg": null, "eng_chg": null}, {"Country": "Czechia", "jul_active": 1.0, "jul_new": 0.0, "jul_eng": 1.0, "aug_active": 3.0, "aug_new": 2.0, "aug_eng": 5.0, "active_chg": 200.0, "new_chg": null, "eng_chg": 400.0}, {"Country": "Libya", "jul_active": 1.0, "jul_new": 0.0, "jul_eng": 1.0, "aug_active": 3.0, "aug_new": 1.0, "aug_eng": 16.0, "active_chg": 200.0, "new_chg": null, "eng_chg": 1500.0}, {"Country": "Paraguay", "jul_active": 0.0, "jul_new": 0.0, "jul_eng": 0.0, "aug_active": 3.0, "aug_new": 2.0, "aug_eng": 4.0, "active_chg": null, "new_chg": null, "eng_chg": null}, {"Country": "Vietnam", "jul_active": 2.0, "jul_new": 2.0, "jul_eng": 4.0, "aug_active": 3.0, "aug_new": 3.0, "aug_eng": 3.0, "active_chg": 50.0, "new_chg": 50.0, "eng_chg": -25.0}, {"Country": "Zambia", "jul_active": 5.0, "jul_new": 2.0, "jul_eng": 12.0, "aug_active": 3.0, "aug_new": 1.0, "aug_eng": 15.0, "active_chg": -40.0, "new_chg": -50.0, "eng_chg": 25.0}, {"Country": "Bahamas", "jul_active": 0.0, "jul_new": 0.0, "jul_eng": 0.0, "aug_active": 2.0, "aug_new": 2.0, "aug_eng": 2.0, "active_chg": null, "new_chg": null, "eng_chg": null}, {"Country": "Argentina", "jul_active": 2.0, "jul_new": 1.0, "jul_eng": 2.0, "aug_active": 2.0, "aug_new": 1.0, "aug_eng": 5.0, "active_chg": 0.0, "new_chg": 0.0, "eng_chg": 150.0}, {"Country": "Azerbaijan", "jul_active": 18.0, "jul_new": 4.0, "jul_eng": 22.0, "aug_active": 2.0, "aug_new": 1.0, "aug_eng": 5.0, "active_chg": -88.9, "new_chg": -75.0, "eng_chg": -77.3}, {"Country": "Mali", "jul_active": 1.0, "jul_new": 0.0, "jul_eng": 1.0, "aug_active": 2.0, "aug_new": 2.0, "aug_eng": 4.0, "active_chg": 100.0, "new_chg": null, "eng_chg": 300.0}, {"Country": "Yemen", "jul_active": 0.0, "jul_new": 0.0, "jul_eng": 1.0, "aug_active": 2.0, "aug_new": 1.0, "aug_eng": 2.0, "active_chg": null, "new_chg": null, "eng_chg": 100.0}, {"Country": "Tanzania", "jul_active": 3.0, "jul_new": 1.0, "jul_eng": 5.0, "aug_active": 2.0, "aug_new": 1.0, "aug_eng": 7.0, "active_chg": -33.3, "new_chg": 0.0, "eng_chg": 40.0}, {"Country": "Trinidad & Tobago", "jul_active": 0.0, "jul_new": 0.0, "jul_eng": 1.0, "aug_active": 2.0, "aug_new": 1.0, "aug_eng": 3.0, "active_chg": null, "new_chg": null, "eng_chg": 200.0}, {"Country": "Bosnia & Herzegovina", "jul_active": 0.0, "jul_new": 0.0, "jul_eng": 0.0, "aug_active": 2.0, "aug_new": 2.0, "aug_eng": 2.0, "active_chg": null, "new_chg": null, "eng_chg": null}, {"Country": "Guyana", "jul_active": 0.0, "jul_new": 0.0, "jul_eng": 0.0, "aug_active": 2.0, "aug_new": 2.0, "aug_eng": 2.0, "active_chg": null, "new_chg": null, "eng_chg": null}, {"Country": "Lesotho", "jul_active": 0.0, "jul_new": 0.0, "jul_eng": 0.0, "aug_active": 2.0, "aug_new": 2.0, "aug_eng": 2.0, "active_chg": null, "new_chg": null, "eng_chg": null}, {"Country": "Chile", "jul_active": 2.0, "jul_new": 1.0, "jul_eng": 5.0, "aug_active": 2.0, "aug_new": 1.0, "aug_eng": 6.0, "active_chg": 0.0, "new_chg": 0.0, "eng_chg": 20.0}, {"Country": "Mauritania", "jul_active": 0.0, "jul_new": 0.0, "jul_eng": 0.0, "aug_active": 2.0, "aug_new": 2.0, "aug_eng": 2.0, "active_chg": null, "new_chg": null, "eng_chg": null}, {"Country": "South Korea", "jul_active": 1.0, "jul_new": 0.0, "jul_eng": 1.0, "aug_active": 2.0, "aug_new": 2.0, "aug_eng": 3.0, "active_chg": 100.0, "new_chg": null, "eng_chg": 200.0}, {"Country": "Sudan", "jul_active": 4.0, "jul_new": 0.0, "jul_eng": 4.0, "aug_active": 2.0, "aug_new": 2.0, "aug_eng": 4.0, "active_chg": -50.0, "new_chg": null, "eng_chg": 0.0}, {"Country": "Romania", "jul_active": 1.0, "jul_new": 0.0, "jul_eng": 1.0, "aug_active": 2.0, "aug_new": 1.0, "aug_eng": 3.0, "active_chg": 100.0, "new_chg": null, "eng_chg": 200.0}, {"Country": "Colombia", "jul_active": 3.0, "jul_new": 3.0, "jul_eng": 5.0, "aug_active": 1.0, "aug_new": 1.0, "aug_eng": 1.0, "active_chg": -66.7, "new_chg": -66.7, "eng_chg": -80.0}, {"Country": "Bolivia", "jul_active": 1.0, "jul_new": 1.0, "jul_eng": 1.0, "aug_active": 1.0, "aug_new": 1.0, "aug_eng": 1.0, "active_chg": 0.0, "new_chg": 0.0, "eng_chg": 0.0}, {"Country": "Armenia", "jul_active": 0.0, "jul_new": 0.0, "jul_eng": 0.0, "aug_active": 1.0, "aug_new": 1.0, "aug_eng": 4.0, "active_chg": null, "new_chg": null, "eng_chg": null}, {"Country": "Cape Verde", "jul_active": 0.0, "jul_new": 0.0, "jul_eng": 0.0, "aug_active": 1.0, "aug_new": 1.0, "aug_eng": 4.0, "active_chg": null, "new_chg": null, "eng_chg": null}, {"Country": "Taiwan", "jul_active": 1.0, "jul_new": 1.0, "jul_eng": 2.0, "aug_active": 1.0, "aug_new": 1.0, "aug_eng": 1.0, "active_chg": 0.0, "new_chg": 0.0, "eng_chg": -50.0}, {"Country": "Bulgaria", "jul_active": 1.0, "jul_new": 0.0, "jul_eng": 2.0, "aug_active": 1.0, "aug_new": 1.0, "aug_eng": 1.0, "active_chg": 0.0, "new_chg": null, "eng_chg": -50.0}, {"Country": "Central African Republic", "jul_active": 0.0, "jul_new": 0.0, "jul_eng": 0.0, "aug_active": 1.0, "aug_new": 1.0, "aug_eng": 1.0, "active_chg": null, "new_chg": null, "eng_chg": null}, {"Country": "Namibia", "jul_active": 3.0, "jul_new": 3.0, "jul_eng": 7.0, "aug_active": 1.0, "aug_new": 0.0, "aug_eng": 1.0, "active_chg": -66.7, "new_chg": -100.0, "eng_chg": -85.7}, {"Country": "Mauritius", "jul_active": 0.0, "jul_new": 0.0, "jul_eng": 0.0, "aug_active": 1.0, "aug_new": 1.0, "aug_eng": 1.0, "active_chg": null, "new_chg": null, "eng_chg": null}, {"Country": "Montenegro", "jul_active": 1.0, "jul_new": 0.0, "jul_eng": 6.0, "aug_active": 1.0, "aug_new": 0.0, "aug_eng": 2.0, "active_chg": 0.0, "new_chg": null, "eng_chg": -66.7}, {"Country": "Georgia", "jul_active": 2.0, "jul_new": 2.0, "jul_eng": 11.0, "aug_active": 1.0, "aug_new": 1.0, "aug_eng": 2.0, "active_chg": -50.0, "new_chg": -50.0, "eng_chg": -81.8}, {"Country": "Jordan", "jul_active": 1.0, "jul_new": 0.0, "jul_eng": 23.0, "aug_active": 1.0, "aug_new": 0.0, "aug_eng": 24.0, "active_chg": 0.0, "new_chg": null, "eng_chg": 4.3}, {"Country": "Guatemala", "jul_active": 0.0, "jul_new": 0.0, "jul_eng": 0.0, "aug_active": 1.0, "aug_new": 1.0, "aug_eng": 1.0, "active_chg": null, "new_chg": null, "eng_chg": null}, {"Country": "Congo - Brazzaville", "jul_active": 0.0, "jul_new": 0.0, "jul_eng": 0.0, "aug_active": 1.0, "aug_new": 1.0, "aug_eng": 1.0, "active_chg": null, "new_chg": null, "eng_chg": null}, {"Country": "Faroe Islands", "jul_active": 0.0, "jul_new": 0.0, "jul_eng": 0.0, "aug_active": 1.0, "aug_new": 1.0, "aug_eng": 1.0, "active_chg": null, "new_chg": null, "eng_chg": null}, {"Country": "Ecuador", "jul_active": 0.0, "jul_new": 0.0, "jul_eng": 0.0, "aug_active": 1.0, "aug_new": 1.0, "aug_eng": 1.0, "active_chg": null, "new_chg": null, "eng_chg": null}, {"Country": "El Salvador", "jul_active": 2.0, "jul_new": 1.0, "jul_eng": 6.0, "aug_active": 1.0, "aug_new": 0.0, "aug_eng": 7.0, "active_chg": -50.0, "new_chg": -100.0, "eng_chg": 16.7}, {"Country": "Eswatini", "jul_active": 0.0, "jul_new": 0.0, "jul_eng": 0.0, "aug_active": 1.0, "aug_new": 1.0, "aug_eng": 1.0, "active_chg": null, "new_chg": null, "eng_chg": null}, {"Country": "Gabon", "jul_active": 0.0, "jul_new": 0.0, "jul_eng": 0.0, "aug_active": 1.0, "aug_new": 1.0, "aug_eng": 1.0, "active_chg": null, "new_chg": null, "eng_chg": null}, {"Country": "Macao", "jul_active": 0.0, "jul_new": 0.0, "jul_eng": 0.0, "aug_active": 1.0, "aug_new": 1.0, "aug_eng": 1.0, "active_chg": null, "new_chg": null, "eng_chg": null}, {"Country": "Mongolia", "jul_active": 0.0, "jul_new": 0.0, "jul_eng": 0.0, "aug_active": 1.0, "aug_new": 0.0, "aug_eng": 1.0, "active_chg": null, "new_chg": null, "eng_chg": null}, {"Country": "Norway", "jul_active": 1.0, "jul_new": 0.0, "jul_eng": 1.0, "aug_active": 1.0, "aug_new": 1.0, "aug_eng": 2.0, "active_chg": 0.0, "new_chg": null, "eng_chg": 100.0}, {"Country": "Slovenia", "jul_active": 0.0, "jul_new": 0.0, "jul_eng": 0.0, "aug_active": 1.0, "aug_new": 1.0, "aug_eng": 1.0, "active_chg": null, "new_chg": null, "eng_chg": null}, {"Country": "Seychelles", "jul_active": 0.0, "jul_new": 0.0, "jul_eng": 0.0, "aug_active": 1.0, "aug_new": 1.0, "aug_eng": 1.0, "active_chg": null, "new_chg": null, "eng_chg": null}, {"Country": "Panama", "jul_active": 0.0, "jul_new": 0.0, "jul_eng": 0.0, "aug_active": 1.0, "aug_new": 1.0, "aug_eng": 1.0, "active_chg": null, "new_chg": null, "eng_chg": null}, {"Country": "Belgium", "jul_active": 1.0, "jul_new": 1.0, "jul_eng": 2.0, "aug_active": 0.0, "aug_new": 0.0, "aug_eng": 0.0, "active_chg": -100.0, "new_chg": -100.0, "eng_chg": -100.0}, {"Country": "Jamaica", "jul_active": 2.0, "jul_new": 2.0, "jul_eng": 3.0, "aug_active": 0.0, "aug_new": 0.0, "aug_eng": 0.0, "active_chg": -100.0, "new_chg": -100.0, "eng_chg": -100.0}, {"Country": "Djibouti", "jul_active": 2.0, "jul_new": 1.0, "jul_eng": 2.0, "aug_active": 0.0, "aug_new": 0.0, "aug_eng": 0.0, "active_chg": -100.0, "new_chg": -100.0, "eng_chg": -100.0}, {"Country": "Maldives", "jul_active": 2.0, "jul_new": 2.0, "jul_eng": 2.0, "aug_active": 0.0, "aug_new": 0.0, "aug_eng": 0.0, "active_chg": -100.0, "new_chg": -100.0, "eng_chg": -100.0}, {"Country": "Kyrgyzstan", "jul_active": 1.0, "jul_new": 0.0, "jul_eng": 1.0, "aug_active": 0.0, "aug_new": 0.0, "aug_eng": 0.0, "active_chg": -100.0, "new_chg": null, "eng_chg": -100.0}, {"Country": "Laos", "jul_active": 1.0, "jul_new": 0.0, "jul_eng": 1.0, "aug_active": 0.0, "aug_new": 0.0, "aug_eng": 0.0, "active_chg": -100.0, "new_chg": null, "eng_chg": -100.0}, {"Country": "Latvia", "jul_active": 2.0, "jul_new": 2.0, "jul_eng": 3.0, "aug_active": 0.0, "aug_new": 0.0, "aug_eng": 0.0, "active_chg": -100.0, "new_chg": -100.0, "eng_chg": -100.0}, {"Country": "Malta", "jul_active": 2.0, "jul_new": 2.0, "jul_eng": 7.0, "aug_active": 0.0, "aug_new": 0.0, "aug_eng": 0.0, "active_chg": -100.0, "new_chg": -100.0, "eng_chg": -100.0}, {"Country": "South Sudan", "jul_active": 1.0, "jul_new": 0.0, "jul_eng": 1.0, "aug_active": 0.0, "aug_new": 0.0, "aug_eng": 0.0, "active_chg": -100.0, "new_chg": null, "eng_chg": -100.0}, {"Country": "Western Sahara", "jul_active": 1.0, "jul_new": 1.0, "jul_eng": 1.0, "aug_active": 0.0, "aug_new": 0.0, "aug_eng": 0.0, "active_chg": -100.0, "new_chg": -100.0, "eng_chg": -100.0}, {"Country": "Venezuela", "jul_active": 2.0, "jul_new": 2.0, "jul_eng": 7.0, "aug_active": 0.0, "aug_new": 0.0, "aug_eng": 0.0, "active_chg": -100.0, "new_chg": -100.0, "eng_chg": -100.0}];
+const SPEND_PRIMARY = [{"Country": "NG", "Country_Name": "Nigeria", "jul_spend": 125.6, "aug_spend": 3912.66, "spend_chg": 3015.2, "is_primary": true}, {"Country": "DZ", "Country_Name": "Algeria", "jul_spend": 861.59, "aug_spend": 2554.47, "spend_chg": 196.5, "is_primary": true}, {"Country": "IN", "Country_Name": "India", "jul_spend": 3843.35, "aug_spend": 2143.58, "spend_chg": -44.2, "is_primary": true}, {"Country": "BR", "Country_Name": "Brazil", "jul_spend": 1382.06, "aug_spend": 693.0, "spend_chg": -49.9, "is_primary": true}, {"Country": "ZA", "Country_Name": "South Africa", "jul_spend": 849.05, "aug_spend": 635.9, "spend_chg": -25.1, "is_primary": true}, {"Country": "TR", "Country_Name": "T\u00fcrkiye", "jul_spend": 74.26, "aug_spend": 344.13, "spend_chg": 363.4, "is_primary": true}, {"Country": "KE", "Country_Name": "Kenya", "jul_spend": 1134.26, "aug_spend": 329.69, "spend_chg": -70.9, "is_primary": true}, {"Country": "MA", "Country_Name": "Morocco", "jul_spend": 1421.99, "aug_spend": 252.38, "spend_chg": -82.3, "is_primary": true}, {"Country": "PH", "Country_Name": "Philippines", "jul_spend": 68.93, "aug_spend": 241.43, "spend_chg": 250.3, "is_primary": true}, {"Country": "SA", "Country_Name": "Saudi Arabia", "jul_spend": 454.41, "aug_spend": 234.41, "spend_chg": -48.4, "is_primary": true}, {"Country": "CM", "Country_Name": "Cameroon", "jul_spend": 13.06, "aug_spend": 226.27, "spend_chg": 1632.6, "is_primary": true}, {"Country": "AR", "Country_Name": "Argentina", "jul_spend": 418.75, "aug_spend": 190.61, "spend_chg": -54.5, "is_primary": true}, {"Country": "UG", "Country_Name": "Uganda", "jul_spend": 12.29, "aug_spend": 132.41, "spend_chg": 977.4, "is_primary": true}, {"Country": "GH", "Country_Name": "Ghana", "jul_spend": 129.42, "aug_spend": 117.37, "spend_chg": -9.3, "is_primary": true}, {"Country": "UZ", "Country_Name": "Uzbekistan", "jul_spend": 73.94, "aug_spend": 85.8, "spend_chg": 16.0, "is_primary": true}, {"Country": "ZM", "Country_Name": "Zambia", "jul_spend": 3.94, "aug_spend": 18.89, "spend_chg": 379.4, "is_primary": true}, {"Country": "EG", "Country_Name": "Egypt", "jul_spend": 7.49, "aug_spend": 14.01, "spend_chg": 87.0, "is_primary": true}, {"Country": "QA", "Country_Name": "Qatar", "jul_spend": 15.3, "aug_spend": 10.46, "spend_chg": -31.6, "is_primary": true}, {"Country": "BH", "Country_Name": "Bahrain", "jul_spend": 8.4, "aug_spend": 7.75, "spend_chg": -7.7, "is_primary": true}, {"Country": "ZW", "Country_Name": "Zimbabwe", "jul_spend": 0.26, "aug_spend": 0.63, "spend_chg": 142.3, "is_primary": true}, {"Country": "CO", "Country_Name": "Colombia", "jul_spend": 0, "aug_spend": 0, "spend_chg": null, "is_primary": true}, {"Country": "SO", "Country_Name": "Somalia", "jul_spend": 0, "aug_spend": 0, "spend_chg": null, "is_primary": true}, {"Country": "CL", "Country_Name": "Chile", "jul_spend": 0, "aug_spend": 0, "spend_chg": null, "is_primary": true}, {"Country": "PE", "Country_Name": "Peru", "jul_spend": 0, "aug_spend": 0, "spend_chg": null, "is_primary": true}];
+const SPEND_REST    = [{"Country": "PK", "Country_Name": "Pakistan", "jul_spend": 1919.49, "aug_spend": 1372.34, "spend_chg": -28.5, "is_primary": false}, {"Country": "JO", "Country_Name": "Jordan", "jul_spend": 254.05, "aug_spend": 543.06, "spend_chg": 113.8, "is_primary": false}, {"Country": "BO", "Country_Name": "Bolivia", "jul_spend": 188.93, "aug_spend": 426.25, "spend_chg": 125.6, "is_primary": false}, {"Country": "SN", "Country_Name": "Senegal", "jul_spend": 84.6, "aug_spend": 345.29, "spend_chg": 308.2, "is_primary": false}, {"Country": "PG", "Country_Name": "Papua New Guinea", "jul_spend": 40.69, "aug_spend": 290.11, "spend_chg": 613.0, "is_primary": false}, {"Country": "LA", "Country_Name": "Laos", "jul_spend": 82.62, "aug_spend": 174.61, "spend_chg": 111.3, "is_primary": false}, {"Country": "FJ", "Country_Name": "Fiji", "jul_spend": 127.58, "aug_spend": 145.76, "spend_chg": 14.3, "is_primary": false}, {"Country": "LB", "Country_Name": "Lebanon", "jul_spend": 222.95, "aug_spend": 136.58, "spend_chg": -38.7, "is_primary": false}, {"Country": "LY", "Country_Name": "Libya", "jul_spend": 37.45, "aug_spend": 122.65, "spend_chg": 227.5, "is_primary": false}, {"Country": "TZ", "Country_Name": "Tanzania", "jul_spend": 53.38, "aug_spend": 82.23, "spend_chg": 54.0, "is_primary": false}, {"Country": "MG", "Country_Name": "Madagascar", "jul_spend": 53.24, "aug_spend": 78.23, "spend_chg": 46.9, "is_primary": false}, {"Country": "AO", "Country_Name": "Angola", "jul_spend": 37.63, "aug_spend": 72.98, "spend_chg": 93.9, "is_primary": false}, {"Country": "DO", "Country_Name": "Dominican Republic", "jul_spend": 250.55, "aug_spend": 70.65, "spend_chg": -71.8, "is_primary": false}, {"Country": "BT", "Country_Name": "Bhutan", "jul_spend": 17.04, "aug_spend": 68.89, "spend_chg": 304.3, "is_primary": false}, {"Country": "KH", "Country_Name": "Cambodia", "jul_spend": 208.74, "aug_spend": 64.84, "spend_chg": -68.9, "is_primary": false}, {"Country": "RW", "Country_Name": "Rwanda", "jul_spend": 57.83, "aug_spend": 62.67, "spend_chg": 8.4, "is_primary": false}, {"Country": "BF", "Country_Name": "Burkina Faso", "jul_spend": 11.91, "aug_spend": 51.0, "spend_chg": 328.2, "is_primary": false}, {"Country": "TG", "Country_Name": "Togo", "jul_spend": 58.54, "aug_spend": 49.71, "spend_chg": -15.1, "is_primary": false}, {"Country": "SL", "Country_Name": "Sierra Leone", "jul_spend": 7.22, "aug_spend": 45.9, "spend_chg": 535.7, "is_primary": false}, {"Country": "TD", "Country_Name": "Chad", "jul_spend": 9.34, "aug_spend": 29.57, "spend_chg": 216.6, "is_primary": false}, {"Country": "LR", "Country_Name": "Liberia", "jul_spend": 21.17, "aug_spend": 29.07, "spend_chg": 37.3, "is_primary": false}, {"Country": "BJ", "Country_Name": "Benin", "jul_spend": 25.41, "aug_spend": 28.82, "spend_chg": 13.4, "is_primary": false}, {"Country": "MW", "Country_Name": "Malawi", "jul_spend": 9.37, "aug_spend": 27.91, "spend_chg": 197.9, "is_primary": false}, {"Country": "KG", "Country_Name": "Kyrgyzstan", "jul_spend": 27.26, "aug_spend": 25.39, "spend_chg": -6.9, "is_primary": false}, {"Country": "PY", "Country_Name": "Paraguay", "jul_spend": 15.03, "aug_spend": 25.36, "spend_chg": 68.7, "is_primary": false}, {"Country": "JM", "Country_Name": "Jamaica", "jul_spend": 35.39, "aug_spend": 24.66, "spend_chg": -30.3, "is_primary": false}, {"Country": "OM", "Country_Name": "Oman", "jul_spend": 33.45, "aug_spend": 22.68, "spend_chg": -32.2, "is_primary": false}, {"Country": "MN", "Country_Name": "Mongolia", "jul_spend": 8.1, "aug_spend": 21.42, "spend_chg": 164.4, "is_primary": false}, {"Country": "TT", "Country_Name": "Trinidad & Tobago", "jul_spend": 40.86, "aug_spend": 19.56, "spend_chg": -52.1, "is_primary": false}, {"Country": "GM", "Country_Name": "Gambia", "jul_spend": 5.35, "aug_spend": 15.86, "spend_chg": 196.4, "is_primary": false}, {"Country": "TJ", "Country_Name": "Tajikistan", "jul_spend": 6.14, "aug_spend": 14.43, "spend_chg": 135.0, "is_primary": false}, {"Country": "SV", "Country_Name": "El Salvador", "jul_spend": 4.59, "aug_spend": 13.55, "spend_chg": 195.2, "is_primary": false}, {"Country": "MX", "Country_Name": "Mexico", "jul_spend": 6.95, "aug_spend": 13.32, "spend_chg": 91.6, "is_primary": false}, {"Country": "MZ", "Country_Name": "Mozambique", "jul_spend": 4.31, "aug_spend": 11.99, "spend_chg": 178.2, "is_primary": false}, {"Country": "KW", "Country_Name": "Kuwait", "jul_spend": 12.73, "aug_spend": 8.85, "spend_chg": -30.5, "is_primary": false}, {"Country": "LS", "Country_Name": "Lesotho", "jul_spend": 1.58, "aug_spend": 6.08, "spend_chg": 284.8, "is_primary": false}, {"Country": "MV", "Country_Name": "Maldives", "jul_spend": 4.55, "aug_spend": 5.03, "spend_chg": 10.5, "is_primary": false}, {"Country": "NE", "Country_Name": "Niger", "jul_spend": 2.32, "aug_spend": 4.93, "spend_chg": 112.5, "is_primary": false}, {"Country": "TN", "Country_Name": "Tunisia", "jul_spend": 6.06, "aug_spend": 3.88, "spend_chg": -36.0, "is_primary": false}, {"Country": "KZ", "Country_Name": "Kazakhstan", "jul_spend": 10.59, "aug_spend": 3.66, "spend_chg": -65.4, "is_primary": false}, {"Country": "CR", "Country_Name": "Costa Rica", "jul_spend": 1.68, "aug_spend": 3.65, "spend_chg": 117.3, "is_primary": false}, {"Country": "GN", "Country_Name": "Guinea", "jul_spend": 0.58, "aug_spend": 3.09, "spend_chg": 432.7, "is_primary": false}, {"Country": "JP", "Country_Name": "Japan", "jul_spend": 99.22, "aug_spend": 3.02, "spend_chg": -97.0, "is_primary": false}, {"Country": "PA", "Country_Name": "Panama", "jul_spend": 2.99, "aug_spend": 2.14, "spend_chg": -28.4, "is_primary": false}, {"Country": "TM", "Country_Name": "Turkmenistan", "jul_spend": 0.79, "aug_spend": 2.09, "spend_chg": 164.5, "is_primary": false}, {"Country": "UY", "Country_Name": "Uruguay", "jul_spend": 1.28, "aug_spend": 1.61, "spend_chg": 25.8, "is_primary": false}, {"Country": "CI", "Country_Name": "C\u00f4te d'Ivoire", "jul_spend": 2.58, "aug_spend": 1.52, "spend_chg": -41.1, "is_primary": false}, {"Country": "BN", "Country_Name": "Brunei", "jul_spend": 0.86, "aug_spend": 1.05, "spend_chg": 22.1, "is_primary": false}, {"Country": "SZ", "Country_Name": "Eswatini", "jul_spend": 0.0, "aug_spend": 0.92, "spend_chg": null, "is_primary": false}, {"Country": "AZ", "Country_Name": "Azerbaijan", "jul_spend": 0.73, "aug_spend": 0.76, "spend_chg": 4.1, "is_primary": false}, {"Country": "SC", "Country_Name": "Seychelles", "jul_spend": 0.16, "aug_spend": 0.41, "spend_chg": 156.2, "is_primary": false}, {"Country": "GP", "Country_Name": "Guadeloupe", "jul_spend": 0.04, "aug_spend": 0.27, "spend_chg": 575.0, "is_primary": false}, {"Country": "BM", "Country_Name": "Bermuda", "jul_spend": 0.03, "aug_spend": 0.14, "spend_chg": 366.7, "is_primary": false}, {"Country": "AE", "Country_Name": "United Arab Emirates", "jul_spend": 1616.33, "aug_spend": 0.0, "spend_chg": -100.0, "is_primary": false}, {"Country": "GF", "Country_Name": "French Guiana", "jul_spend": 0.01, "aug_spend": 0.0, "spend_chg": -100.0, "is_primary": false}, {"Country": "MF", "Country_Name": "St. Martin", "jul_spend": 0.01, "aug_spend": 0.0, "spend_chg": -100.0, "is_primary": false}, {"Country": "MS", "Country_Name": "Montserrat", "jul_spend": 0.01, "aug_spend": 0.0, "spend_chg": -100.0, "is_primary": false}, {"Country": "PW", "Country_Name": "Palau", "jul_spend": 0.34, "aug_spend": 0.0, "spend_chg": -100.0, "is_primary": false}, {"Country": "NC", "Country_Name": "New Caledonia", "jul_spend": 0.25, "aug_spend": 0.0, "spend_chg": -100.0, "is_primary": false}];
+
+const REVENUE = [
+  { channel:"Total",   julVal:874000, augVal:661000, color:"#10B981", isBold:true  },
+  { channel:"Partner", julVal:326000, augVal:79800,  color:"#22C55E", isBold:false },
+  { channel:"Daniyal", julVal:25000,  augVal:5340,   color:"#94A3B8", isBold:false },
+  { channel:"FN",      julVal:309000, augVal:312000, color:"#38BDF8", isBold:false },
+  { channel:"P2D",     julVal:36400,  augVal:82100,  color:"#FB923C", isBold:true  },
+  { channel:"Organic", julVal:177000, augVal:182000, color:"#A78BFA", isBold:false },
+];
+
+/* ── helpers ─────────────────────────────────────────────────────── */
+const fmtK = (n) => {
+  if (n == null) return "—";
+  if (n >= 1000000) return "$" + (n/1000000).toFixed(2) + "M";
+  if (n >= 1000)    return "$" + (n/1000).toFixed(n >= 10000 ? 1 : 2) + "k";
+  return "$" + n.toLocaleString();
+};
+const fmt = (n) => {
+  if (n == null) return "—";
+  if (n >= 1000000) return (n/1000000).toFixed(2) + "M";
+  if (n >= 1000)    return (n/1000).toFixed(1) + "K";
+  return Math.round(n).toLocaleString();
+};
+const fmtUSD = (n) => {
+  if (n == null || n === 0) return "$0";
+  if (n >= 1000) return "$" + (n/1000).toFixed(1) + "K";
+  return "$" + n.toFixed(0);
+};
+const pctChg = (a, b) => (b && b !== 0) ? ((a - b) / b * 100) : null;
+
+const ChgBadge = ({ v, cap = 9999 }) => {
+  if (v == null) return <span style={{color:"#475569",fontSize:"12px",padding:"2px 7px"}}>New</span>;
+  if (v > cap)   return <span style={{color:"#22C55E",fontWeight:700,fontSize:"12px",background:"rgba(34,197,94,.1)",padding:"2px 7px",borderRadius:"4px"}}>+{cap}%+</span>;
+  const pos = v > 5, neg = v < -5;
+  const col = pos ? "#22C55E" : neg ? "#EF4444" : "#94A3B8";
+  const bg  = pos ? "rgba(34,197,94,.1)" : neg ? "rgba(239,68,68,.1)" : "transparent";
+  return <span style={{color:col,background:bg,padding:"2px 7px",borderRadius:"4px",fontWeight:700,fontVariantNumeric:"tabular-nums",fontSize:"12px"}}>{v > 0 ? "+" : ""}{v.toFixed(1)}%</span>;
+};
+
+const SortIco = ({ col, sk, sd }) => (
+  <span style={{opacity:sk===col?1:0.2,fontSize:"9px",marginLeft:"3px"}}>
+    {sk === col ? (sd === "desc" ? "▼" : "▲") : "▼"}
+  </span>
+);
+const TH = ({ children, col, sk, sd, onSort, right }) => (
+  <th onClick={() => onSort && onSort(col)} style={{padding:"9px 12px",textAlign:right?"right":"left",fontSize:"11px",fontWeight:600,color:"#475569",cursor:onSort?"pointer":"default",userSelect:"none",whiteSpace:"nowrap",letterSpacing:"0.04em"}}>
+    {children}{onSort && <SortIco col={col} sk={sk} sd={sd}/>}
+  </th>
+);
+const TD = ({ children, right, bold, muted }) => (
+  <td style={{padding:"9px 12px",textAlign:right?"right":"left",fontVariantNumeric:"tabular-nums",color:muted?"#64748B":bold?"#F1F5F9":"#CBD5E1",fontWeight:bold?600:400,fontSize:"13px"}}>
+    {children}
+  </td>
+);
+const KpiStrip = ({ cards, cols }) => (
+  <div style={{display:"grid",gridTemplateColumns:`repeat(${cols||cards.length},1fr)`,gap:"10px",marginBottom:"20px"}}>
+    {cards.map(k => (
+      <div key={k.label} style={{background:"#111827",border:"1px solid #1E293B",borderRadius:"10px",padding:"14px 16px"}}>
+        <div style={{fontSize:"10px",color:"#64748B",fontWeight:600,marginBottom:"5px",letterSpacing:"0.06em"}}>{k.label.toUpperCase()}</div>
+        <div style={{fontSize:"22px",fontWeight:800,color:k.accent}}>{k.val}</div>
+        {k.sub && <div style={{fontSize:"11px",color:k.subColor||"#64748B",marginTop:"3px",fontWeight:600}}>{k.sub}</div>}
+      </div>
+    ))}
+  </div>
+);
+const DataTable = ({ children, search, setSearch, count, placeholder }) => (
+  <div>
+    <div style={{display:"flex",gap:"10px",alignItems:"center",marginBottom:"12px"}}>
+      <input value={search} onChange={e => setSearch(e.target.value)} placeholder={placeholder || "Search…"}
+        style={{background:"#111827",border:"1px solid #1E293B",borderRadius:"7px",padding:"7px 13px",color:"#CBD5E1",fontSize:"13px",width:"190px",outline:"none"}}/>
+      <span style={{fontSize:"12px",color:"#334155"}}>{count} rows</span>
+    </div>
+    <div style={{background:"#111827",border:"1px solid #1E293B",borderRadius:"10px",overflow:"hidden"}}>
+      <div style={{overflowX:"auto"}}>
+        <table style={{width:"100%",borderCollapse:"collapse"}}>{children}</table>
+      </div>
+    </div>
+  </div>
+);
+
+/* ══════════════════════════════════════════════════════════════════
+   SUMMARY
+══════════════════════════════════════════════════════════════════ */
+function SummarySection() {
+  const allSpend = [...SPEND_PRIMARY, ...SPEND_REST];
+  const grandJul = allSpend.reduce((s,r) => s + r.jul_spend, 0);
+  const grandAug = allSpend.reduce((s,r) => s + r.aug_spend, 0);
+  const mauJulA  = MAU_DATA.reduce((s,r) => s + (r.jul_active||0), 0);
+  const mauAugA  = MAU_DATA.reduce((s,r) => s + (r.aug_active||0), 0);
+  const comJulA  = COM_DATA.reduce((s,r) => s + (r.jul_active||0), 0);
+  const comAugA  = COM_DATA.reduce((s,r) => s + (r.aug_active||0), 0);
+
+  const SectionCard = ({ title, accent, children }) => (
+    <div style={{background:"#111827",border:"1px solid #1E293B",borderRadius:"12px",overflow:"hidden",marginBottom:"16px"}}>
+      <div style={{padding:"12px 18px",borderBottom:"1px solid #1E293B",display:"flex",alignItems:"center",gap:"10px"}}>
+        <div style={{width:"3px",height:"18px",borderRadius:"2px",background:accent,flexShrink:0}}/>
+        <span style={{fontSize:"13px",fontWeight:700,color:"#E2E8F0"}}>{title}</span>
+      </div>
+      <div style={{padding:"16px 18px"}}>{children}</div>
+    </div>
+  );
+  const MetaRow = ({ label, jul, aug, chg, highlight }) => (
+    <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"9px 0",borderBottom:"1px solid #0F172A"}}>
+      <span style={{fontSize:"13px",color:highlight?"#F1F5F9":"#94A3B8",fontWeight:highlight?600:400}}>{label}</span>
+      <div style={{display:"flex",gap:"16px",alignItems:"center"}}>
+        <span style={{fontSize:"12px",color:"#475569",fontVariantNumeric:"tabular-nums",minWidth:"60px",textAlign:"right"}}>{jul}</span>
+        <span style={{fontSize:"13px",color:highlight?"#F1F5F9":"#CBD5E1",fontWeight:highlight?700:500,fontVariantNumeric:"tabular-nums",minWidth:"60px",textAlign:"right"}}>{aug}</span>
+        {chg != null && <ChgBadge v={typeof chg === "number" ? chg : null}/>}
+      </div>
+    </div>
+  );
+  const Callout = ({ text, type = "neutral" }) => {
+    const styles = {
+      positive: {bg:"rgba(34,197,94,.07)",  border:"rgba(34,197,94,.2)",  dot:"#22C55E"},
+      negative: {bg:"rgba(239,68,68,.07)",  border:"rgba(239,68,68,.2)",  dot:"#EF4444"},
+      warning:  {bg:"rgba(245,158,11,.07)", border:"rgba(245,158,11,.2)", dot:"#F59E0B"},
+      neutral:  {bg:"rgba(148,163,184,.07)",border:"rgba(148,163,184,.2)",dot:"#94A3B8"},
+    };
+    const s = styles[type];
+    return (
+      <div style={{display:"flex",gap:"10px",alignItems:"flex-start",padding:"8px 12px",background:s.bg,border:`1px solid ${s.border}`,borderRadius:"8px",marginBottom:"8px"}}>
+        <div style={{width:"6px",height:"6px",borderRadius:"50%",background:s.dot,marginTop:"5px",flexShrink:0}}/>
+        <span style={{fontSize:"12px",color:"#CBD5E1",lineHeight:"1.5"}}>{text}</span>
+      </div>
+    );
+  };
+  const colHdr = (
+    <div style={{display:"flex",justifyContent:"flex-end",gap:"16px",paddingBottom:"6px",marginBottom:"4px",borderBottom:"1px solid #1E293B"}}>
+      <span style={{fontSize:"10px",color:"#475569",fontWeight:600,minWidth:"60px",textAlign:"right"}}>JULY</span>
+      <span style={{fontSize:"10px",color:"#475569",fontWeight:600,minWidth:"60px",textAlign:"right"}}>AUGUST</span>
+      <span style={{fontSize:"10px",color:"#475569",fontWeight:600,minWidth:"64px",textAlign:"right"}}>MoM</span>
+    </div>
+  );
+
+  return (
+    <div>
+      <p style={{fontSize:"12px",color:"#64748B",margin:"0 0 20px"}}>High-level performance snapshot · July vs August 2026</p>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:"12px",marginBottom:"24px"}}>
+        {[
+          {label:"Total Revenue",    jul:fmtK(874000), aug:fmtK(661000),  chg:pctChg(661000,874000),   accent:"#10B981"},
+          {label:"Meta Ad Spend",    jul:fmtK(grandJul),aug:fmtK(grandAug),chg:pctChg(grandAug,grandJul),accent:"#F97316"},
+          {label:"MAU Active Users", jul:fmt(mauJulA), aug:fmt(mauAugA),  chg:pctChg(mauAugA,mauJulA), accent:"#3B82F6"},
+          {label:"COM Active Users", jul:fmt(comJulA), aug:fmt(comAugA),  chg:null, sub:"Launch month", accent:"#8B5CF6"},
+          {label:"Primary Mkt Spend",jul:fmtK(SPEND_PRIMARY.reduce((s,r)=>s+r.jul_spend,0)),aug:fmtK(SPEND_PRIMARY.reduce((s,r)=>s+r.aug_spend,0)),chg:pctChg(SPEND_PRIMARY.reduce((s,r)=>s+r.aug_spend,0),SPEND_PRIMARY.reduce((s,r)=>s+r.jul_spend,0)),accent:"#FB923C"},
+          {label:"P2D Revenue",      jul:fmtK(36400),  aug:fmtK(82100),   chg:pctChg(82100,36400),     accent:"#FB923C"},
+        ].map(k => (
+          <div key={k.label} style={{background:"#111827",border:"1px solid #1E293B",borderRadius:"10px",padding:"14px 16px"}}>
+            <div style={{fontSize:"10px",color:"#64748B",fontWeight:600,marginBottom:"6px",letterSpacing:"0.06em"}}>{k.label.toUpperCase()}</div>
+            <div style={{fontSize:"20px",fontWeight:800,color:k.accent}}>{k.aug}</div>
+            <div style={{display:"flex",alignItems:"center",gap:"8px",marginTop:"4px"}}>
+              <span style={{fontSize:"11px",color:"#475569"}}>Jul: {k.jul}</span>
+              {k.chg != null && <ChgBadge v={k.chg}/>}
+              {k.sub && <span style={{fontSize:"11px",color:"#F59E0B",fontWeight:600}}>{k.sub}</span>}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"16px"}}>
+        <SectionCard title="Revenue by Channel" accent="#10B981">
+          {colHdr}
+          <MetaRow label="Total Revenue" jul={fmtK(874000)} aug={fmtK(661000)} chg={pctChg(661000,874000)} highlight/>
+          <MetaRow label="Partner"  jul={fmtK(326000)} aug={fmtK(79800)}  chg={pctChg(79800,326000)}/>
+          <MetaRow label="Daniyal"  jul={fmtK(25000)}  aug={fmtK(5340)}   chg={pctChg(5340,25000)}/>
+          <MetaRow label="FN"       jul={fmtK(309000)} aug={fmtK(312000)} chg={pctChg(312000,309000)}/>
+          <MetaRow label="P2D"      jul={fmtK(36400)}  aug={fmtK(82100)}  chg={pctChg(82100,36400)} highlight/>
+          <MetaRow label="Organic"  jul={fmtK(177000)} aug={fmtK(182000)} chg={pctChg(182000,177000)}/>
+        </SectionCard>
+        <SectionCard title="Revenue Highlights" accent="#10B981">
+          <Callout type="negative" text="Total revenue down -24.4% MoM ($874k → $661k), driven primarily by Partner channel decline (-$246k)."/>
+          <Callout type="negative" text="Partner dropped -75.5% in a single month — the largest contributor to the overall shortfall."/>
+          <Callout type="positive" text="P2D more than doubled (+125.5%, $36k → $82k) — the strongest growth channel this month."/>
+          <Callout type="neutral"  text="FN and Organic both held steady: FN +1%, Organic +2.8%. Stable but not compensating for Partner."/>
+          <Callout type="negative" text="Daniyal channel down -78.6% ($25k → $5.3k). Significant drop worth monitoring."/>
+        </SectionCard>
+        <SectionCard title="Ad Spend — Top Countries" accent="#F97316">
+          {colHdr}
+          <MetaRow label="Total Spend"   jul={fmtK(grandJul)}  aug={fmtK(grandAug)}  chg={pctChg(grandAug,grandJul)} highlight/>
+          <MetaRow label="Nigeria (NG)"  jul={fmtK(125.6)}     aug={fmtK(3912.7)}    chg={pctChg(3912.7,125.6)} highlight/>
+          <MetaRow label="Algeria (DZ)"  jul={fmtK(861.6)}     aug={fmtK(2554.5)}    chg={pctChg(2554.5,861.6)}/>
+          <MetaRow label="India (IN)"    jul={fmtK(3843.4)}    aug={fmtK(2143.6)}    chg={pctChg(2143.6,3843.4)}/>
+          <MetaRow label="Pakistan (PK)" jul={fmtK(1919.5)}    aug={fmtK(1372.3)}    chg={pctChg(1372.3,1919.5)}/>
+          <MetaRow label="Morocco (MA)"  jul={fmtK(1422.0)}    aug={fmtK(252.4)}     chg={pctChg(252.4,1422.0)}/>
+        </SectionCard>
+        <SectionCard title="Spend Highlights" accent="#F97316">
+          <Callout type="neutral"  text="Total Meta spend flat MoM ($16.6k → $16.7k, +0.6%). Budget unchanged but allocation shifted dramatically."/>
+          <Callout type="positive" text="Nigeria became the #1 spend country in August ($126 → $3.9k, +3,015%) aligned with IB network expansion."/>
+          <Callout type="positive" text="Algeria nearly tripled ($862 → $2.6k, +197%) — now the #2 country by spend."/>
+          <Callout type="negative" text="Morocco (-82%), Kenya (-71%), and UAE (near zero) were effectively defunded in August."/>
+          <Callout type="negative" text="India spend cut by nearly half (-44%) despite remaining a top traffic and revenue market."/>
+        </SectionCard>
+        <SectionCard title="Traffic — MAU (Mauritius)" accent="#3B82F6">
+          {colHdr}
+          <MetaRow label="Total Active Users" jul={fmt(mauJulA)} aug={fmt(mauAugA)} chg={pctChg(mauAugA,mauJulA)} highlight/>
+          <MetaRow label="India"    jul={fmt(342246)} aug={fmt(70973)}  chg={pctChg(70973,342246)}/>
+          <MetaRow label="Algeria"  jul={fmt(80381)}  aug={fmt(187536)} chg={pctChg(187536,80381)} highlight/>
+          <MetaRow label="Pakistan" jul={fmt(103347)} aug={fmt(66771)}  chg={pctChg(66771,103347)}/>
+          <MetaRow label="Nigeria"  jul={fmt(5525)}   aug={fmt(17293)}  chg={pctChg(17293,5525)} highlight/>
+          <MetaRow label="Morocco"  jul={fmt(42425)}  aug={fmt(16165)}  chg={pctChg(16165,42425)}/>
+        </SectionCard>
+        <SectionCard title="Traffic Highlights" accent="#3B82F6">
+          <Callout type="negative" text="MAU total active users down -20.6% MoM, largely driven by India (-79.3%) dropping from #1 to a distant #2."/>
+          <Callout type="positive" text="Algeria surged to #1 in MAU (+133% active users) reflecting increased spend in the market."/>
+          <Callout type="positive" text="Nigeria traffic up +213% — strong early signal aligning with the spend reallocation and IB push."/>
+          <Callout type="negative" text="Morocco traffic collapsed -61.9%, consistent with the spend cut."/>
+          <Callout type="warning"  text="COM entity had a near-launch month in August (3.8k → 175k active users). India leads with 92k of 175k total COM users."/>
+        </SectionCard>
+      </div>
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   REVENUE
+══════════════════════════════════════════════════════════════════ */
+function RevenueSection() {
+  const total    = REVENUE.find(r => r.channel === "Total");
+  const channels = REVENUE.filter(r => r.channel !== "Total");
+  return (
+    <div>
+      <p style={{fontSize:"12px",color:"#64748B",margin:"0 0 16px"}}>Source: Internal BI · Deposit revenue by channel · Jul vs Aug 2026</p>
+      <KpiStrip cols={3} cards={[
+        {label:"Jul Total Revenue", val:fmtK(total.julVal), accent:"#64748B"},
+        {label:"Aug Total Revenue", val:fmtK(total.augVal), accent:"#10B981",
+          sub:(pctChg(total.augVal,total.julVal)?.toFixed(1)??"—")+"% vs Jul",
+          subColor:pctChg(total.augVal,total.julVal)>=0?"#22C55E":"#EF4444"},
+        {label:"MoM Delta",
+          val:(total.augVal-total.julVal<0?"-":"+")+fmtK(Math.abs(total.augVal-total.julVal)),
+          accent:total.augVal>=total.julVal?"#22C55E":"#EF4444",
+          sub:"vs "+fmtK(total.julVal)+" in July"},
+      ]}/>
+      <div style={{background:"#111827",border:"1px solid #1E293B",borderRadius:"10px",overflow:"hidden"}}>
+        <table style={{width:"100%",borderCollapse:"collapse"}}>
+          <thead>
+            <tr style={{background:"#0F172A"}}>
+              <th style={{padding:"10px 16px",textAlign:"left", fontSize:"11px",fontWeight:600,color:"#475569",letterSpacing:"0.04em"}}>CHANNEL</th>
+              <th style={{padding:"10px 16px",textAlign:"right",fontSize:"11px",fontWeight:600,color:"#475569",letterSpacing:"0.04em"}}>JUL 2026</th>
+              <th style={{padding:"10px 16px",textAlign:"right",fontSize:"11px",fontWeight:600,color:"#475569",letterSpacing:"0.04em"}}>AUG 2026</th>
+              <th style={{padding:"10px 16px",textAlign:"right",fontSize:"11px",fontWeight:600,color:"#475569",letterSpacing:"0.04em"}}>MoM</th>
+              <th style={{padding:"10px 16px",textAlign:"right",fontSize:"11px",fontWeight:600,color:"#475569",letterSpacing:"0.04em"}}>DELTA</th>
+              <th style={{padding:"10px 16px",               fontSize:"11px",fontWeight:600,color:"#475569",letterSpacing:"0.04em"}}>AUG SHARE</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style={{background:"rgba(16,185,129,.07)",borderBottom:"2px solid #1E293B"}}>
+              <td style={{padding:"12px 16px"}}>
+                <div style={{display:"flex",alignItems:"center",gap:"10px"}}>
+                  <div style={{width:"10px",height:"10px",borderRadius:"50%",background:"#10B981",flexShrink:0}}/>
+                  <span style={{color:"#F1F5F9",fontWeight:700,fontSize:"14px"}}>Total</span>
+                </div>
+              </td>
+              <td style={{padding:"12px 16px",textAlign:"right",color:"#94A3B8",fontVariantNumeric:"tabular-nums",fontSize:"14px",fontWeight:600}}>{fmtK(total.julVal)}</td>
+              <td style={{padding:"12px 16px",textAlign:"right",color:"#F1F5F9",fontVariantNumeric:"tabular-nums",fontSize:"14px",fontWeight:700}}>{fmtK(total.augVal)}</td>
+              <td style={{padding:"12px 16px",textAlign:"right"}}><ChgBadge v={pctChg(total.augVal,total.julVal)}/></td>
+              <td style={{padding:"12px 16px",textAlign:"right",fontVariantNumeric:"tabular-nums",fontSize:"13px",fontWeight:600,color:total.augVal>=total.julVal?"#22C55E":"#EF4444"}}>
+                {total.augVal-total.julVal>=0?"+":""}{fmtK(total.augVal-total.julVal)}
+              </td>
+              <td style={{padding:"12px 16px"}}>
+                <div style={{display:"flex",alignItems:"center",gap:"8px"}}>
+                  <div style={{height:"6px",borderRadius:"3px",background:"rgba(16,185,129,.15)",width:"100px",overflow:"hidden"}}>
+                    <div style={{height:"100%",width:"100%",background:"#10B981",borderRadius:"3px"}}/>
+                  </div>
+                  <span style={{fontSize:"12px",color:"#94A3B8"}}>100%</span>
+                </div>
+              </td>
+            </tr>
+            {channels.map((r, i) => {
+              const chg   = pctChg(r.augVal, r.julVal);
+              const delta = r.augVal - r.julVal;
+              const share = total.augVal ? (r.augVal/total.augVal*100) : 0;
+              const barW  = total.augVal ? Math.min(r.augVal/total.augVal*100*3, 100) : 0;
+              return (
+                <tr key={r.channel} style={{borderTop:"1px solid #1A2332",background:i%2?"rgba(255,255,255,.01)":"transparent"}}>
+                  <td style={{padding:"11px 16px"}}>
+                    <div style={{display:"flex",alignItems:"center",gap:"10px"}}>
+                      <div style={{width:"10px",height:"10px",borderRadius:"50%",background:r.color,flexShrink:0}}/>
+                      <span style={{color:"#CBD5E1",fontWeight:r.isBold?700:400,fontSize:"13px"}}>{r.channel}</span>
+                    </div>
+                  </td>
+                  <td style={{padding:"11px 16px",textAlign:"right",color:"#64748B",fontVariantNumeric:"tabular-nums",fontSize:"13px"}}>{fmtK(r.julVal)}</td>
+                  <td style={{padding:"11px 16px",textAlign:"right",color:r.isBold?"#F1F5F9":"#CBD5E1",fontVariantNumeric:"tabular-nums",fontSize:"13px",fontWeight:r.isBold?700:500}}>{fmtK(r.augVal)}</td>
+                  <td style={{padding:"11px 16px",textAlign:"right"}}><ChgBadge v={chg}/></td>
+                  <td style={{padding:"11px 16px",textAlign:"right",fontVariantNumeric:"tabular-nums",fontSize:"12px",fontWeight:600,color:delta>=0?"#22C55E":"#EF4444"}}>
+                    {delta>=0?"+":""}{fmtK(delta)}
+                  </td>
+                  <td style={{padding:"11px 16px"}}>
+                    <div style={{display:"flex",alignItems:"center",gap:"8px"}}>
+                      <div style={{height:"6px",borderRadius:"3px",background:"rgba(255,255,255,.06)",width:"100px",overflow:"hidden"}}>
+                        <div style={{height:"100%",width:barW+"%",background:r.color,borderRadius:"3px",opacity:.8}}/>
+                      </div>
+                      <span style={{fontSize:"12px",color:"#94A3B8",minWidth:"32px"}}>{share.toFixed(1)}%</span>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   AD SPEND — shared table
+══════════════════════════════════════════════════════════════════ */
+function SpendTable({ data, grandJul, grandAug }) {
+  const [sk, setSk] = useState("aug_spend");
+  const [sd, setSd] = useState("desc");
+  const [q,  setQ]  = useState("");
+  const toggle = (k) => { if (sk===k) setSd(d => d==="asc"?"desc":"asc"); else { setSk(k); setSd("desc"); } };
+  const julTotal = data.reduce((s,r) => s+r.jul_spend, 0);
+  const augTotal = data.reduce((s,r) => s+r.aug_spend, 0);
+  const totChg   = julTotal > 0 ? ((augTotal-julTotal)/julTotal*100) : null;
+  const rows = useMemo(() =>
+    [...data.filter(r => (r.Country_Name||r.Country).toLowerCase().includes(q.toLowerCase()))]
+      .sort((a,b) => sd==="desc" ? (b[sk]??-Infinity)-(a[sk]??-Infinity) : (a[sk]??-Infinity)-(b[sk]??-Infinity)),
+    [sk, sd, q, data]
+  );
+  return (
+    <div>
+      <KpiStrip cards={[
+        {label:"Jul Spend (subset)", val:"$"+julTotal.toLocaleString("en-US",{maximumFractionDigits:0}), accent:"#64748B", sub:((julTotal/grandJul)*100).toFixed(1)+"% of total Jul"},
+        {label:"Aug Spend (subset)", val:"$"+augTotal.toLocaleString("en-US",{maximumFractionDigits:0}), accent:"#F97316", sub:totChg!=null?(totChg>0?"+":"")+totChg.toFixed(1)+"% vs Jul":"—", subColor:totChg!=null&&totChg>=0?"#22C55E":"#EF4444"},
+        {label:"Aug Share of Total", val:((augTotal/grandAug)*100).toFixed(1)+"%", accent:"#FB923C"},
+        {label:"Countries",          val:data.length,                              accent:"#94A3B8"},
+      ]}/>
+      <DataTable search={q} setSearch={setQ} count={rows.length} placeholder="Search country…">
+        <thead><tr style={{background:"#0F172A"}}>
+          <TH col="Country_Name" sk={sk} sd={sd} onSort={toggle}>Country</TH>
+          <TH col="jul_spend"   sk={sk} sd={sd} onSort={toggle} right>Jul Spend</TH>
+          <TH col="aug_spend"   sk={sk} sd={sd} onSort={toggle} right>Aug Spend</TH>
+          <TH col="spend_chg"  sk={sk} sd={sd} onSort={toggle} right>MoM</TH>
+          <th style={{padding:"9px 12px",fontSize:"11px",fontWeight:600,color:"#475569",whiteSpace:"nowrap"}}>Aug Share</th>
+        </tr></thead>
+        <tbody>
+          {rows.map((r, i) => {
+            const name = r.Country_Name || r.Country;
+            const barW = augTotal > 0 ? Math.min(r.aug_spend/augTotal*100*5, 100) : 0;
+            return (
+              <tr key={r.Country} style={{borderTop:"1px solid #1A2332",background:i%2?"rgba(255,255,255,.01)":"transparent"}}>
+                <td style={{padding:"9px 12px",color:"#CBD5E1",fontWeight:500,fontSize:"13px"}}>
+                  <span style={{fontSize:"10px",color:"#334155",marginRight:"5px"}}>#{i+1}</span>{name}
+                </td>
+                <TD right muted>{fmtUSD(r.jul_spend)}</TD>
+                <TD right bold>{fmtUSD(r.aug_spend)}</TD>
+                <td style={{padding:"9px 12px",textAlign:"right"}}><ChgBadge v={r.spend_chg} cap={3500}/></td>
+                <td style={{padding:"9px 12px"}}>
+                  <div style={{display:"flex",alignItems:"center",gap:"8px"}}>
+                    <div style={{height:"6px",borderRadius:"3px",background:"rgba(249,115,22,.12)",width:"80px",overflow:"hidden"}}>
+                      <div style={{height:"100%",width:barW+"%",background:"#F97316",borderRadius:"3px"}}/>
+                    </div>
+                    <span style={{fontSize:"12px",color:"#94A3B8",minWidth:"36px"}}>
+                      {augTotal>0?(r.aug_spend/augTotal*100).toFixed(1)+"%":"—"}
+                    </span>
+                  </div>
+                </td>
+              </tr>
+            );
+          })}
+          <tr style={{borderTop:"2px solid #334155",background:"rgba(249,115,22,.06)"}}>
+            <td style={{padding:"9px 12px",color:"#F97316",fontWeight:700,fontSize:"13px"}}>SUBTOTAL</td>
+            <td style={{padding:"9px 12px",textAlign:"right",color:"#F97316",fontWeight:700,fontVariantNumeric:"tabular-nums",fontSize:"13px"}}>{fmtUSD(julTotal)}</td>
+            <td style={{padding:"9px 12px",textAlign:"right",color:"#F97316",fontWeight:700,fontVariantNumeric:"tabular-nums",fontSize:"13px"}}>{fmtUSD(augTotal)}</td>
+            <td style={{padding:"9px 12px",textAlign:"right"}}><ChgBadge v={totChg} cap={3500}/></td>
+            <td style={{padding:"9px 12px",color:"#F97316",fontWeight:700,fontSize:"13px"}}>{((augTotal/grandAug)*100).toFixed(1)}% of total</td>
+          </tr>
+        </tbody>
+      </DataTable>
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   TRAFFIC — MAU
+══════════════════════════════════════════════════════════════════ */
+function MauTab() {
+  const [sk, setSk] = useState("aug_active");
+  const [sd, setSd] = useState("desc");
+  const [q,  setQ]  = useState("");
+  const toggle = (k) => { if (sk===k) setSd(d => d==="asc"?"desc":"asc"); else { setSk(k); setSd("desc"); } };
+  const tot = (key) => MAU_DATA.reduce((s,r) => s+(r[key]||0), 0);
+  const pct = (a,b) => b ? ((a-b)/b*100).toFixed(1) : null;
+  const rows = useMemo(() =>
+    [...MAU_DATA.filter(r => r.Country && r.Country.toLowerCase().includes(q.toLowerCase()))]
+      .sort((a,b) => sd==="desc" ? (b[sk]??-Infinity)-(a[sk]??-Infinity) : (a[sk]??-Infinity)-(b[sk]??-Infinity)),
+    [sk, sd, q]
+  );
+  const [julA,augA,julN,augN,julS,augS] = [tot("jul_active"),tot("aug_active"),tot("jul_new"),tot("aug_new"),tot("jul_sess"),tot("aug_sess")];
+  return (
+    <div>
+      <p style={{fontSize:"12px",color:"#64748B",margin:"0 0 16px"}}>FNMarkets | GA4 · Mauritius entity · {MAU_DATA.length} countries</p>
+      <KpiStrip cards={[
+        {label:"Jul Active Users", val:fmt(julA), accent:"#64748B"},
+        {label:"Aug Active Users", val:fmt(augA), accent:"#3B82F6", sub:(pct(augA,julA)??"—")+"%", subColor:augA>=julA?"#22C55E":"#EF4444"},
+        {label:"Aug New Users",    val:fmt(augN), accent:"#6366F1", sub:(pct(augN,julN)??"—")+"% vs Jul", subColor:augN>=julN?"#22C55E":"#EF4444"},
+        {label:"Aug Sessions",     val:fmt(augS), accent:"#8B5CF6", sub:(pct(augS,julS)??"—")+"% vs Jul", subColor:augS>=julS?"#22C55E":"#EF4444"},
+      ]}/>
+      <DataTable search={q} setSearch={setQ} count={rows.length} placeholder="Search country…">
+        <thead><tr style={{background:"#0F172A"}}>
+          <TH col="Country"    sk={sk} sd={sd} onSort={toggle}>Country</TH>
+          <TH col="jul_active" sk={sk} sd={sd} onSort={toggle} right>Jul Active</TH>
+          <TH col="aug_active" sk={sk} sd={sd} onSort={toggle} right>Aug Active</TH>
+          <TH col="active_chg" sk={sk} sd={sd} onSort={toggle} right>Active MoM</TH>
+          <TH col="jul_new"    sk={sk} sd={sd} onSort={toggle} right>Jul New</TH>
+          <TH col="aug_new"    sk={sk} sd={sd} onSort={toggle} right>Aug New</TH>
+          <TH col="new_chg"    sk={sk} sd={sd} onSort={toggle} right>New MoM</TH>
+          <TH col="jul_sess"   sk={sk} sd={sd} onSort={toggle} right>Jul Sessions</TH>
+          <TH col="aug_sess"   sk={sk} sd={sd} onSort={toggle} right>Aug Sessions</TH>
+          <TH col="sess_chg"   sk={sk} sd={sd} onSort={toggle} right>Sessions MoM</TH>
+          <TH col="aug_bounce" sk={sk} sd={sd} onSort={toggle} right>Bounce Rate</TH>
+        </tr></thead>
+        <tbody>
+          {rows.map((r, i) => (
+            <tr key={r.Country} style={{borderTop:"1px solid #1A2332",background:i%2?"rgba(255,255,255,.01)":"transparent"}}>
+              <TD><span style={{fontSize:"10px",color:"#334155",marginRight:"5px"}}>#{i+1}</span>{r.Country}</TD>
+              <TD right muted>{fmt(r.jul_active)}</TD>
+              <TD right bold>{fmt(r.aug_active)}</TD>
+              <td style={{padding:"9px 12px",textAlign:"right"}}><ChgBadge v={r.active_chg} cap={500}/></td>
+              <TD right muted>{fmt(r.jul_new)}</TD>
+              <TD right>{fmt(r.aug_new)}</TD>
+              <td style={{padding:"9px 12px",textAlign:"right"}}><ChgBadge v={r.new_chg} cap={500}/></td>
+              <TD right muted>{fmt(r.jul_sess)}</TD>
+              <TD right>{fmt(r.aug_sess)}</TD>
+              <td style={{padding:"9px 12px",textAlign:"right"}}><ChgBadge v={r.sess_chg} cap={500}/></td>
+              <TD right muted>{r.aug_bounce!=null?(r.aug_bounce*100).toFixed(1)+"%":"—"}</TD>
+            </tr>
+          ))}
+        </tbody>
+      </DataTable>
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   TRAFFIC — COM
+══════════════════════════════════════════════════════════════════ */
+function ComTab() {
+  const [sk, setSk] = useState("aug_active");
+  const [sd, setSd] = useState("desc");
+  const [q,  setQ]  = useState("");
+  const toggle = (k) => { if (sk===k) setSd(d => d==="asc"?"desc":"asc"); else { setSk(k); setSd("desc"); } };
+  const tot = (key) => COM_DATA.reduce((s,r) => s+(r[key]||0), 0);
+  const rows = useMemo(() =>
+    [...COM_DATA.filter(r => r.Country && r.Country.toLowerCase().includes(q.toLowerCase()))]
+      .sort((a,b) => sd==="desc" ? (b[sk]??-Infinity)-(a[sk]??-Infinity) : (a[sk]??-Infinity)-(b[sk]??-Infinity)),
+    [sk, sd, q]
+  );
+  const [julA,augA,julN,augN,julE,augE] = [tot("jul_active"),tot("aug_active"),tot("jul_new"),tot("aug_new"),tot("jul_eng"),tot("aug_eng")];
+  return (
+    <div>
+      <p style={{fontSize:"12px",color:"#64748B",margin:"0 0 4px"}}>FNMarkets Global | GA4 · COM entity · {COM_DATA.length} countries</p>
+      <p style={{fontSize:"11px",color:"#F59E0B",margin:"0 0 16px"}}>⚠ COM was early-stage in July — MoM figures reflect a near-launch baseline</p>
+      <KpiStrip cards={[
+        {label:"Jul Active Users",      val:fmt(julA), accent:"#64748B"},
+        {label:"Aug Active Users",      val:fmt(augA), accent:"#8B5CF6", sub:"~"+(augA/julA).toFixed(0)+"× vs Jul", subColor:"#22C55E"},
+        {label:"Aug New Users",         val:fmt(augN), accent:"#6366F1", sub:"~"+(augN/julN).toFixed(0)+"× vs Jul", subColor:"#22C55E"},
+        {label:"Aug Engaged Sessions",  val:fmt(augE), accent:"#A855F7", sub:"~"+(augE/julE).toFixed(0)+"× vs Jul", subColor:"#22C55E"},
+      ]}/>
+      <DataTable search={q} setSearch={setQ} count={rows.length} placeholder="Search country…">
+        <thead><tr style={{background:"#0F172A"}}>
+          <TH col="Country"    sk={sk} sd={sd} onSort={toggle}>Country</TH>
+          <TH col="jul_active" sk={sk} sd={sd} onSort={toggle} right>Jul Active</TH>
+          <TH col="aug_active" sk={sk} sd={sd} onSort={toggle} right>Aug Active</TH>
+          <TH col="active_chg" sk={sk} sd={sd} onSort={toggle} right>Active MoM</TH>
+          <TH col="jul_new"    sk={sk} sd={sd} onSort={toggle} right>Jul New</TH>
+          <TH col="aug_new"    sk={sk} sd={sd} onSort={toggle} right>Aug New</TH>
+          <TH col="new_chg"    sk={sk} sd={sd} onSort={toggle} right>New MoM</TH>
+          <TH col="jul_eng"    sk={sk} sd={sd} onSort={toggle} right>Jul Engaged Sess.</TH>
+          <TH col="aug_eng"    sk={sk} sd={sd} onSort={toggle} right>Aug Engaged Sess.</TH>
+          <TH col="eng_chg"    sk={sk} sd={sd} onSort={toggle} right>Eng. Sess. MoM</TH>
+        </tr></thead>
+        <tbody>
+          {rows.map((r, i) => (
+            <tr key={r.Country} style={{borderTop:"1px solid #1A2332",background:i%2?"rgba(255,255,255,.01)":"transparent"}}>
+              <TD><span style={{fontSize:"10px",color:"#334155",marginRight:"5px"}}>#{i+1}</span>{r.Country}</TD>
+              <TD right muted>{fmt(r.jul_active)}</TD>
+              <TD right bold>{fmt(r.aug_active)}</TD>
+              <td style={{padding:"9px 12px",textAlign:"right"}}><ChgBadge v={r.active_chg} cap={500}/></td>
+              <TD right muted>{fmt(r.jul_new)}</TD>
+              <TD right>{fmt(r.aug_new)}</TD>
+              <td style={{padding:"9px 12px",textAlign:"right"}}><ChgBadge v={r.new_chg} cap={500}/></td>
+              <TD right muted>{fmt(r.jul_eng)}</TD>
+              <TD right>{fmt(r.aug_eng)}</TD>
+              <td style={{padding:"9px 12px",textAlign:"right"}}><ChgBadge v={r.eng_chg} cap={500}/></td>
+            </tr>
+          ))}
+        </tbody>
+      </DataTable>
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   ACTION SUMMARY
+══════════════════════════════════════════════════════════════════ */
+function ActionSummarySection() {
+  const Block = ({ title, accent, icon, items }) => (
+    <div style={{background:"#111827",border:"1px solid #1E293B",borderRadius:"12px",overflow:"hidden",marginBottom:"16px"}}>
+      <div style={{padding:"14px 20px",borderBottom:"1px solid #1E293B",display:"flex",alignItems:"center",gap:"10px"}}>
+        <span style={{fontSize:"16px"}}>{icon}</span>
+        <span style={{fontSize:"14px",fontWeight:700,color:"#F1F5F9"}}>{title}</span>
+        <div style={{marginLeft:"auto",width:"8px",height:"8px",borderRadius:"50%",background:accent}}/>
+      </div>
+      <div style={{padding:"16px 20px",display:"flex",flexDirection:"column",gap:"10px"}}>
+        {items.map((item, i) => (
+          <div key={i} style={{display:"flex",gap:"12px",alignItems:"flex-start"}}>
+            <div style={{marginTop:"6px",width:"7px",height:"7px",borderRadius:"50%",background:accent,flexShrink:0}}/>
+            <p style={{margin:0,fontSize:"13px",color:"#CBD5E1",lineHeight:"1.65"}}>{item}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  return (
+    <div>
+      <p style={{fontSize:"12px",color:"#64748B",margin:"0 0 20px"}}>Strategic context, ongoing initiatives, and open questions · As of August 2026</p>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"16px"}}>
+        <Block title="Actions Taken So Far" accent="#22C55E" icon="✅" items={[
+          "Running ads with refreshed creatives that position FNmarkets as an educator.",
+          "Shifted budget towards countries with strong IB Network (Nigeria). More countries to be added as IB onboarding continues.",
+          "Prioritising entities based on ease of market access — factoring in KYC complexity and availability of local payment methods.",
+          "Looking to activate $10 Minimum Deposit for Nigeria and India by next week.",
+        ]}/>
+        <Block title="Action Plans" accent="#3B82F6" icon="🗺️" items={[
+          "Collaborating with CPM to generate and run Creator UGCs and Partnership Ads.",
+          "Building Social Media awareness in Nigeria. CPM is planning to promote FNmarkets through Radio Shows and IBs, giving traders a 360° TOMA of FNmarkets.",
+        ]}/>
+        <Block title="Proposal" accent="#A855F7" icon="💡" items={[
+          "Run a Prop Survey to gauge how many existing prop traders are interested in Brokerage, and understand entry condition preferences (minimum deposit, leverage, instruments, KYC requirements).",
+        ]}/>
+        <div style={{display:"flex",flexDirection:"column",gap:"16px"}}>
+          <Block title="Open Questions" accent="#F59E0B" icon="❓" items={[
+            "What is our next target license, what is the estimated timeline to obtain it, and when can we start preparing the marketing plan?",
+          ]}/>
+          <div style={{background:"#111827",border:"1px solid #1E293B",borderRadius:"12px",padding:"16px 20px"}}>
+            <div style={{fontSize:"10px",color:"#64748B",fontWeight:600,letterSpacing:"0.08em",marginBottom:"12px"}}>STATUS LEGEND</div>
+            {[
+              {color:"#22C55E",label:"Actions Taken",  desc:"In progress or already live"},
+              {color:"#3B82F6",label:"Action Plans",   desc:"Agreed and being executed"},
+              {color:"#A855F7",label:"Proposal",       desc:"Under consideration — needs alignment"},
+              {color:"#F59E0B",label:"Open Question",  desc:"Awaiting input / decision pending"},
+            ].map(s => (
+              <div key={s.label} style={{display:"flex",alignItems:"center",gap:"10px",marginBottom:"8px"}}>
+                <div style={{width:"8px",height:"8px",borderRadius:"50%",background:s.color,flexShrink:0}}/>
+                <span style={{fontSize:"12px",color:"#F1F5F9",fontWeight:600,minWidth:"110px"}}>{s.label}</span>
+                <span style={{fontSize:"12px",color:"#475569"}}>{s.desc}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   ROOT
+══════════════════════════════════════════════════════════════════ */
+function App() {
+  const [section,    setSection]    = useState("summary");
+  const [trafficTab, setTrafficTab] = useState("MAU");
+  const [spendTab,   setSpendTab]   = useState("primary");
+
+  const allSpend = [...SPEND_PRIMARY, ...SPEND_REST];
+  const grandJul = allSpend.reduce((s,r) => s+r.jul_spend, 0);
+  const grandAug = allSpend.reduce((s,r) => s+r.aug_spend, 0);
+
+  const NAV = [
+    {id:"summary", label:"📋 Summary",       color:"#6366F1"},
+    {id:"revenue", label:"💵 Revenue",        color:"#10B981"},
+    {id:"spend",   label:"💰 Ad Spend",       color:"#F97316"},
+    {id:"traffic", label:"📊 Traffic",        color:"#3B82F6"},
+    {id:"actions", label:"📌 Action Summary", color:"#A855F7"},
+  ];
+
+  return (
+    <div style={{padding:"24px",maxWidth:"1400px",margin:"0 auto"}}>
+      <div style={{marginBottom:"24px"}}>
+        <div style={{fontSize:"11px",letterSpacing:"0.1em",color:"#64748B",marginBottom:"5px",fontWeight:600}}>FNMARKETS · PERFORMANCE REPORT</div>
+        <h1 style={{fontSize:"22px",fontWeight:700,color:"#F8FAFC",margin:0}}>July vs August 2026</h1>
+      </div>
+
+      <div style={{display:"flex",gap:"8px",marginBottom:"24px",flexWrap:"wrap"}}>
+        {NAV.map(n => (
+          <button key={n.id} onClick={() => setSection(n.id)} style={{
+            padding:"9px 20px",borderRadius:"8px",fontWeight:700,fontSize:"13px",
+            cursor:"pointer",border:"none",
+            background:section===n.id?n.color:"#1E293B",
+            color:section===n.id?"#fff":"#64748B",
+          }}>{n.label}</button>
+        ))}
+      </div>
+
+      {section==="summary" && <SummarySection/>}
+      {section==="revenue" && <RevenueSection/>}
+
+      {section==="spend" && (
+        <div>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:"10px",marginBottom:"20px"}}>
+            {[
+              {label:"Jul Total Spend", val:"$"+grandJul.toLocaleString("en-US",{maximumFractionDigits:0}), accent:"#64748B"},
+              {label:"Aug Total Spend", val:"$"+grandAug.toLocaleString("en-US",{maximumFractionDigits:0}), accent:"#F97316",
+                sub:(((grandAug-grandJul)/grandJul)*100).toFixed(1)+"% vs Jul",
+                subColor:(grandAug-grandJul)>=0?"#22C55E":"#EF4444"},
+              {label:"Meta · "+allSpend.length+" Countries", val:"Primary: "+SPEND_PRIMARY.length+"  ·  Rest: "+SPEND_REST.length, accent:"#94A3B8"},
+            ].map(k => (
+              <div key={k.label} style={{background:"#111827",border:"1px solid #1E293B",borderRadius:"10px",padding:"14px 16px"}}>
+                <div style={{fontSize:"10px",color:"#64748B",fontWeight:600,marginBottom:"5px",letterSpacing:"0.06em"}}>{k.label.toUpperCase()}</div>
+                <div style={{fontSize:"20px",fontWeight:800,color:k.accent}}>{k.val}</div>
+                {k.sub && <div style={{fontSize:"11px",color:k.subColor||"#64748B",marginTop:"3px",fontWeight:600}}>{k.sub}</div>}
+              </div>
+            ))}
+          </div>
+          <div style={{display:"flex",gap:"6px",marginBottom:"20px"}}>
+            {[["primary","Primary Markets","#F97316"],["rest","Rest Markets","#94A3B8"]].map(([id,lbl,col]) => (
+              <button key={id} onClick={() => setSpendTab(id)} style={{padding:"7px 20px",borderRadius:"6px",fontWeight:600,fontSize:"13px",cursor:"pointer",border:"none",background:spendTab===id?col:"#1A2332",color:spendTab===id?"#fff":"#475569"}}>{lbl}</button>
+            ))}
+          </div>
+          {spendTab==="primary" && <div><p style={{fontSize:"12px",color:"#64748B",margin:"0 0 16px"}}>24 defined primary markets · Meta Ads Manager</p><SpendTable data={SPEND_PRIMARY} grandJul={grandJul} grandAug={grandAug}/></div>}
+          {spendTab==="rest"    && <div><p style={{fontSize:"12px",color:"#64748B",margin:"0 0 16px"}}>All remaining countries outside primary markets · Meta Ads Manager</p><SpendTable data={SPEND_REST} grandJul={grandJul} grandAug={grandAug}/></div>}
+        </div>
+      )}
+
+      {section==="traffic" && (
+        <div>
+          <div style={{display:"flex",gap:"6px",marginBottom:"20px"}}>
+            {[["MAU","MAU","#3B82F6"],["COM","COM","#8B5CF6"]].map(([id,lbl,col]) => (
+              <button key={id} onClick={() => setTrafficTab(id)} style={{padding:"7px 20px",borderRadius:"6px",fontWeight:600,fontSize:"13px",cursor:"pointer",border:"none",background:trafficTab===id?col:"#1A2332",color:trafficTab===id?"#fff":"#475569"}}>{lbl}</button>
+            ))}
+          </div>
+          {trafficTab==="MAU" && <MauTab/>}
+          {trafficTab==="COM" && <ComTab/>}
+        </div>
+      )}
+
+      {section==="actions" && <ActionSummarySection/>}
+
+      <div style={{marginTop:"16px",fontSize:"11px",color:"#1E293B"}}>
+        Revenue: Internal BI · Spend: Meta Ads Manager · Traffic: FNMarkets GA4 · Jul 1–31 &amp; Aug 1–31, 2026
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>
