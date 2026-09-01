@@ -965,13 +965,23 @@ body {
 </div>
 
 <script>
+function showGate() {
+  var gate = document.getElementById('gate');
+  gate.style.display = 'flex';
+  gate.style.opacity = '1';
+  document.getElementById('gateInput').focus();
+}
+function hideGate() {
+  var gate = document.getElementById('gate');
+  gate.style.transition = 'opacity 0.4s ease';
+  gate.style.opacity = '0';
+  setTimeout(function(){ gate.style.display = 'none'; }, 400);
+}
 function unlock() {
   var val = document.getElementById('gateInput').value;
   if (val === '2022') {
-    var gate = document.getElementById('gate');
-    gate.style.transition = 'opacity 0.4s ease';
-    gate.style.opacity = '0';
-    setTimeout(function(){ gate.style.display = 'none'; }, 400);
+    sessionStorage.setItem('fn_report_auth', '1');
+    hideGate();
   } else {
     var err = document.getElementById('gateError');
     var inp = document.getElementById('gateInput');
@@ -991,7 +1001,11 @@ function togglePw() {
   if (inp.type === 'password') { inp.type = 'text'; btn.innerHTML = '&#128064;'; }
   else { inp.type = 'password'; btn.innerHTML = '&#128065;'; }
 }
-document.getElementById('gateInput').focus();
+if (sessionStorage.getItem('fn_report_auth') === '1') {
+  document.getElementById('gate').style.display = 'none';
+} else {
+  document.getElementById('gateInput').focus();
+}
 </script>
 
 <div class="ambient-bg">
