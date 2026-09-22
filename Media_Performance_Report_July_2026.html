@@ -1027,6 +1027,7 @@ if (sessionStorage.getItem('fn_report_auth') === '1') {
       <li><a href="#strategy">Strategy</a></li>
       <li><a href="#clevertap">CleverTap</a></li>
       <li><a href="#blockers">Blockers</a></li>
+      <li><a href="FNmarkets August Report.html" style="color:var(--purple)!important;border-color:rgba(167,139,250,0.3)!important;">FNmarkets</a></li>
     </ul>
     <div class="nav-date">JUL 2026</div>
     <button class="mobile-menu-btn" id="menuBtn" aria-label="Menu">
@@ -1044,21 +1045,17 @@ if (sessionStorage.getItem('fn_report_auth') === '1') {
     <a href="#strategy">Strategy</a>
     <a href="#clevertap">CleverTap</a>
     <a href="#blockers">Blockers</a>
+    <a href="FNmarkets August Report.html" style="color:var(--purple)!important;">FNmarkets</a>
   </div>
 </nav>
 
 <div class="main">
 
 <!-- MONTH SWITCHER -->
-<div style="display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:28px;">
-  <div class="month-switcher" style="margin:0">
-    <button class="month-btn active" data-month="july">July 2026</button>
-    <button class="month-btn" data-month="august">August 2026</button>
-    <button class="month-btn" data-month="weekly">This Week Update</button>
-  </div>
-  <a href="FNmarkets August Report.html" style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:10px;background:rgba(167,139,250,0.12);border:1px solid rgba(167,139,250,0.3);color:var(--purple);font-size:14px;font-weight:600;text-decoration:none;transition:var(--transition);" onmouseover="this.style.background='rgba(167,139,250,0.2)'" onmouseout="this.style.background='rgba(167,139,250,0.12)'">
-    <span style="font-size:16px">📊</span> FNmarkets Report
-  </a>
+<div class="month-switcher">
+  <button class="month-btn active" data-month="july">July 2026</button>
+  <button class="month-btn" data-month="august">August 2026</button>
+  <button class="month-btn" data-month="weekly">This Week Update</button>
 </div>
 
 <!-- JULY REPORT -->
@@ -1852,18 +1849,12 @@ if (sessionStorage.getItem('fn_report_auth') === '1') {
 
 <div class="month-report" id="weekly-content">
 
-  <!-- Weekly Update Header -->
-  <div class="reveal" style="margin-bottom:32px;">
-    <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px;padding-bottom:20px;border-bottom:1px solid var(--border);">
-      <div>
-        <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--text-dim);font-family:'JetBrains Mono',monospace;margin-bottom:8px;">Next Ventures · Marketing Analytics</div>
-        <h2 style="font-size:32px;font-weight:800;color:var(--text-primary);letter-spacing:-0.5px;line-height:1;">Weekly <span style="color:var(--text-dim);font-weight:300;">Update</span></h2>
-      </div>
-      <div style="text-align:right;">
-        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);font-family:'JetBrains Mono',monospace;margin-bottom:4px;">Vol. 38 · Issue 2026/09</div>
-        <div style="font-size:14px;color:var(--text-muted);font-style:italic;">23 September 2026</div>
-      </div>
-    </div>
+  <!-- Weekly Hero -->
+  <div class="hero">
+    <div class="hero-label">Weekly Marketing Update — Vol. 38</div>
+    <h1>This Week <span style="font-weight:300;opacity:0.5;">Update</span></h1>
+    <p>Products covered: CFD · Futures · FNmarkets — Week ending 23 September 2026</p>
+    <div class="hero-badge">WK 38 · SEP 2026</div>
   </div>
 
   <!-- Summary Strip -->
@@ -1883,7 +1874,7 @@ if (sessionStorage.getItem('fn_report_auth') === '1') {
   </div>
 
   <!-- CFD Section -->
-  <div class="reveal" style="margin-bottom:44px;">
+  <div class="reveal" id="weekly-cfd" style="margin-bottom:44px;">
     <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px;">
       <span style="font-size:9px;letter-spacing:3px;text-transform:uppercase;font-weight:600;padding:4px 12px;border-radius:6px;background:rgba(224,82,82,0.1);color:#e05252;border:1px solid rgba(224,82,82,0.25);font-family:'JetBrains Mono',monospace;flex-shrink:0;">CFD</span>
       <span style="font-size:20px;font-weight:700;color:var(--text-primary);">CFD Weekly Update</span>
@@ -1935,7 +1926,7 @@ if (sessionStorage.getItem('fn_report_auth') === '1') {
   </div>
 
   <!-- Futures Section -->
-  <div class="reveal" style="margin-bottom:44px;">
+  <div class="reveal" id="weekly-futures" style="margin-bottom:44px;">
     <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px;">
       <span style="font-size:9px;letter-spacing:3px;text-transform:uppercase;font-weight:600;padding:4px 12px;border-radius:6px;background:rgba(212,168,67,0.1);color:#d4a843;border:1px solid rgba(212,168,67,0.25);font-family:'JetBrains Mono',monospace;flex-shrink:0;">Futures</span>
       <span style="font-size:20px;font-weight:700;color:var(--text-primary);">Futures Weekly Update</span>
@@ -1968,7 +1959,7 @@ if (sessionStorage.getItem('fn_report_auth') === '1') {
   </div>
 
   <!-- FNmarkets Section -->
-  <div class="reveal" style="margin-bottom:16px;">
+  <div class="reveal" id="weekly-fnm" style="margin-bottom:16px;">
     <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px;">
       <span style="font-size:9px;letter-spacing:3px;text-transform:uppercase;font-weight:600;padding:4px 12px;border-radius:6px;background:rgba(76,175,130,0.1);color:#4caf82;border:1px solid rgba(76,175,130,0.25);font-family:'JetBrains Mono',monospace;flex-shrink:0;">FNmarkets</span>
       <span style="font-size:20px;font-weight:700;color:var(--text-primary);">FNmarkets Weekly Update</span>
@@ -2000,11 +1991,13 @@ const augustNavLinks = [
   {href:'#aug-reddit',text:'Reddit'},{href:'#aug-offers',text:'Offers'},
   {href:'#aug-retention',text:'2nd Purchase'},{href:'#aug-clevertap',text:'CleverTap'}
 ];
+const fnmLink = {href:'FNmarkets August Report.html', text:'FNmarkets', external:true};
 function setNavLinks(links) {
   const ul = document.querySelector('.nav-links');
   const mob = document.getElementById('mobileMenu');
-  ul.innerHTML = links.map(l=>`<li><a href="${l.href}">${l.text}</a></li>`).join('');
-  mob.innerHTML = links.map(l=>`<a href="${l.href}">${l.text}</a>`).join('');
+  const all = links.concat([fnmLink]);
+  ul.innerHTML = all.map(l=>`<li><a href="${l.href}"${l.external?' style="color:var(--purple)"':''}>${l.text}</a></li>`).join('');
+  mob.innerHTML = all.map(l=>`<a href="${l.href}"${l.external?' style="color:var(--purple)"':''}>${l.text}</a>`).join('');
   mob.querySelectorAll('a').forEach(a => {
     a.addEventListener('click', () => {
       document.getElementById('menuBtn').classList.remove('open');
@@ -2035,7 +2028,7 @@ document.querySelectorAll('.month-btn').forEach(btn => {
         animateCount(el, parseInt(el.dataset.count));
       });
     } else if (month === 'weekly') {
-      setNavLinks([]);
+      setNavLinks([{href:'#weekly-cfd',text:'CFD'},{href:'#weekly-futures',text:'Futures'},{href:'#weekly-fnm',text:'FNmarkets'}]);
       if (navDate) navDate.textContent = 'WK 38';
       // Resize iframe to its content once loaded
       var frame = document.getElementById('weeklyFrame');
